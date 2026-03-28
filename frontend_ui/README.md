@@ -1,73 +1,103 @@
-# React + TypeScript + Vite
+# WellAdapt Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**AI-Powered Mental Wellness Assistant for University Students**
 
-Currently, two official plugins are available:
+This is the React-based frontend for the WellAdapt platform. It provides a secure, empathetic, and bilingual interface for students to engage with AI counseling, access emergency resources, and track their wellness journey.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Layer | Technology |
+|---|---|
+| Framework | React (Vite) |
+| State Management | React Hooks (`useState`, `useEffect`, `useRef`) |
+| Routing | React Router DOM |
+| API Client | Axios (with interceptors for JWT) |
+| Styling | Custom CSS3 (modular and responsive) |
+| Rich Text | `react-markdown` (for AI response formatting) |
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Key Features
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+**Bilingual Support** — Full UI toggle between English and Sinhala.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+**Safety Net Layer** — Real-time client-side crisis detection that triggers an Emergency SOS Modal for high-risk keywords.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**Rich AI Responses** — Structured counseling feedback with formatted text, bullet points, and supportive language.
+
+**Wellness Analytics** — Integration with the backend to export a 30-day PDF Wellness Summary.
+
+**Session Management** — Persistent chat history with the ability to create, load, and delete sessions.
+
+---
+
+## Setup and Installation
+
+### Prerequisites
+
+- Node.js v18.0.0 or higher
+- npm or yarn
+
+### Installation
+
+Navigate to the frontend directory and install dependencies:
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Environment Configuration
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Create a `.env` file in the root of the frontend directory:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_API_URL=http://localhost:5000/api
 ```
+
+### Running the Development Server
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`.
+
+---
+
+## Folder Structure
+
+```
+src/
+├── components/        # Reusable UI components (SOSModal, PrivateRoute)
+├── pages/             # Main views (Login, Register, Chat)
+├── utils/             # Helper modules (crisisDetection, translations)
+├── assets/            # Images and icons
+├── App.tsx            # Root component and route definitions
+└── App.css            # Global styling and theme variables
+```
+
+---
+
+## Security and Performance
+
+**JWT Authentication** — Tokens are stored in `localStorage` and transmitted via `Authorization` headers on all API requests.
+
+**Route Guarding** — Private routes ensure the Chat interface is accessible only to authenticated users.
+
+**Blob Handling** — The PDF export feature uses `URL.createObjectURL` to securely handle binary report data without exposing it to the DOM.
+
+---
+
+## Crisis Intervention Logic
+
+The frontend includes a deterministic safety layer that operates independently of the AI backend. Before any message is submitted to the server, it is evaluated by `isCrisisMessage()`. If high-risk language is detected in either English or Sinhala, the application intercepts the request and immediately presents the user with the National Mental Health Helpline number (**1926**).
+
+This ensures that crisis response is guaranteed regardless of server availability or AI model behavior.
+
+---
+
+## Contributing
+
+Please follow the existing code conventions and ensure all new components are accompanied by the appropriate translation keys for both supported languages. Test crisis detection changes carefully before submitting a pull request.
