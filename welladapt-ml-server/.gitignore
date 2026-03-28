@@ -1,0 +1,37 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+
+# --- ML SPECIFIC IGNORES ---
+# We ignore these because they are large binaries or datasets.
+# You should keep these backed up locally or on Google Drive.
+*.h5
+*.pkl
+*.csv
+
+# If you have specific names:
+best_english_model.h5
+best_sinhala_model.h5
+english_emotion_model.h5
+sinhala_emotion_model.h5
+tokenizer_en.pkl
+tokenizer_si.pkl
+label_encoder_en.pkl
+label_encoder_si.pkl
+sinhala_consoler_responses.csv
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
