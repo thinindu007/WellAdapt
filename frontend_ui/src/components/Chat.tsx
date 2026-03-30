@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // Added for Rich Text/Eye-catching bubbles
 import { translations } from '../utils/translations';
+import BreathingSuggestionCard from './BreathingSuggestionCard';
 import '../App.css';
 
 // --- MODULAR IMPORTS ---
@@ -18,6 +19,7 @@ function Chat() {
     const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
     const [currentMood, setCurrentMood] = useState<string>('');
     const [isTyping, setIsTyping] = useState(false);
+    const [showBreathingSuggestion, setShowBreathingSuggestion] = useState(false);
 
     // --- NEW: MODULAR STATE ---
     const [showSOS, setShowSOS] = useState(false);
@@ -136,6 +138,7 @@ function Chat() {
 
             setCurrentMood(data.emotion);
             setMessages(prev => [...prev, { text: data.reply || data.response, sender: 'bot' }]);
+            setShowBreathingSuggestion(data.suggestBreathing || false);
 
         } catch (err) {
             console.error("Chat Error:", err);
@@ -208,6 +211,10 @@ function Chat() {
                     <button className="export-report-btn" onClick={() => navigate('/dashboard')}>
                         📈 {lang === 'si' ? 'මනෝභාව දර්ශක පුවරුව' : 'My Mood Dashboard'}
                     </button>
+                    {/* NEW: Breathing Exercise Navigation */}
+                    <button className="export-report-btn" onClick={() => navigate('/breathing')}>
+                        🧘 {lang === 'si' ? 'ආශ්වාස අභ්‍යාස' : 'Breathing Exercises'}
+                    </button>
 
                     <div className="session-list">
                         <p className="sidebar-label">{t.history}</p>
@@ -246,6 +253,9 @@ function Chat() {
                                 </div>
                             </div>
                         ))}
+                        {showBreathingSuggestion && !isTyping && (
+                            <BreathingSuggestionCard lang={lang} />
+                        )}
                         {isTyping && (
                             <div className="message bot typing">
                                 <div className="typing-indicator">

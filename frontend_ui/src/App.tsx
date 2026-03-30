@@ -4,6 +4,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Chat from './components/Chat';
 import MoodDashboard from './components/MoodDashboard';
+import BreathingExercise from './components/BreathingExercise';
 import './App.css';
 
 // --- PROTECTED ROUTE COMPONENT ---
@@ -45,6 +46,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/breathing" element={<ProtectedRoute><BreathingExercise /></ProtectedRoute>} />
         {/* Redirect unknown paths or root to Login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>

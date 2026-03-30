@@ -22,6 +22,7 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
 
         let detectedEmotion = "";
         let botResponse = "";
+        let mlConfidence = 0;
 
         if (userLang === 'si') {
             // --- SINHALA STRATEGY: LLaMA 3 Detects + Responds ---
@@ -54,6 +55,7 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
             // Detect emotion via your CNN-LSTM FastAPI server
             const mlResponse = await axios.post('http://localhost:8000/predict/english', { text });
             detectedEmotion = mlResponse.data.emotion;
+            const mlConfidence = mlResponse.data.confidence || 0;
 
             const ollamaResponse = await axios.post('http://localhost:11434/api/generate', {
                 model: "llama3",
@@ -81,11 +83,14 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
         );
 
         // 3. Return response to Frontend
+        const suggestBreathing = ['Stress', 'Anxiety', 'Fear', 'Depression'].includes(detectedEmotion);
+
         return res.status(200).json({
             status: "success",
             emotion: detectedEmotion,
             reply: botResponse,
-            sessionId: sessionId
+            sessionId: sessionId,
+            suggestBreathing: suggestBreathing
         });
 
     } catch (error: any) {

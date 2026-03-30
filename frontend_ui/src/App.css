@@ -372,6 +372,25 @@ button:active {
   margin-bottom: 25px;
 }
 
+.export-report-btn {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid #334155;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background 0.2s;
+}
+
+.export-report-btn:hover {
+  background: #1e293b;
+}
+
 .session-list {
   flex: 1;
   overflow-y: auto;

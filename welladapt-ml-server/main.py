@@ -133,7 +133,7 @@ async def predict_english(request: ChatRequest):
         
         pred = en_model.predict(padded, verbose=0)
         idx = np.argmax(pred)
-        return {"emotion": en_le.inverse_transform([idx])[0]}
+        return {"emotion": en_le.inverse_transform([idx])[0], "confidence": float(pred[0][idx])}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -146,7 +146,7 @@ async def predict_sinhala(request: ChatRequest):
         
         pred = si_model.predict(padded, verbose=0)
         idx = np.argmax(pred)
-        return {"emotion": si_le.inverse_transform([idx])[0]}
+        return {"emotion": si_le.inverse_transform([idx])[0], "confidence": float(pred[0][idx])}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
