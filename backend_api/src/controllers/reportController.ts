@@ -114,9 +114,46 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
             doc.fillColor('#64748b').fontSize(11).text("No distress-related advice required in the recent period.");
         }
 
-        // Section 4: Emergency Contacts (Standardized Safety)
+        // Section 4: PHQ-2/GAD-2 Clinical Screening History (NEW)
+        doc.moveDown(2);
+        doc.fillColor('#0369a1').fontSize(14).text('4. Standardized Self-Assessment Screening (PHQ-2 / GAD-2)', { underline: true });
         doc.moveDown();
-        doc.fillColor('#ef4444').fontSize(12).font('Helvetica-Bold').text('Emergency Support Resources (Sri Lanka)');
+
+        try {
+            const assessmentData = await query(
+                `SELECT phq2_total, gad2_total, created_at 
+                 FROM assessments 
+                 WHERE user_id = $1 AND created_at > NOW() - INTERVAL '30 days'
+                 ORDER BY created_at DESC`,
+                [userId]
+            );
+
+            if (assessmentData.rows.length > 0) {
+                doc.fillColor('#334155').fontSize(10).text(
+                    'The following scores are from the PHQ-2 (depression) and GAD-2 (anxiety) screening instruments, ' +
+                    'validated by Kroenke et al. (2003, 2007). Scores >= 3 suggest further clinical evaluation.',
+                    { lineGap: 3 }
+                );
+                doc.moveDown();
+
+                assessmentData.rows.forEach((row: any, index: number) => {
+                    const date = new Date(row.created_at).toLocaleDateString();
+                    const phqFlag = row.phq2_total >= 3 ? ' ⚠' : '';
+                    const gadFlag = row.gad2_total >= 3 ? ' ⚠' : '';
+                    doc.fillColor('#334155').fontSize(10).text(
+                        `${date}  —  PHQ-2: ${row.phq2_total}/6${phqFlag}  |  GAD-2: ${row.gad2_total}/6${gadFlag}`
+                    );
+                });
+            } else {
+                doc.fillColor('#64748b').fontSize(10).text('No self-assessment data recorded in the last 30 days.');
+            }
+        } catch (assessErr) {
+            doc.fillColor('#64748b').fontSize(10).text('Self-assessment data unavailable.');
+        }
+
+        // Section 5: Emergency Contacts (Standardized Safety)
+        doc.moveDown();
+        doc.fillColor('#ef4444').fontSize(12).font('Helvetica-Bold').text('5.Emergency Support Resources (Sri Lanka)');
         doc.font('Helvetica');
         doc.fontSize(10).fillColor('#334155');
         doc.text('• National Mental Health Helpline: 1926');

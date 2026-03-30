@@ -3,6 +3,7 @@ import { handleChat, getUserSessions, getSessionMessages, deleteSession } from '
 import { authenticateToken } from '../middleware/authMiddleware';
 import { generateWellnessReport } from '../controllers/reportController';
 import { getMoodTrends, getMoodDistribution, getMoodSummary } from '../controllers/analyticsController';
+import { submitAssessment, getAssessmentHistory, checkAssessmentDue } from '../controllers/assessmentController';
 
 
 const router = Router();
@@ -23,5 +24,10 @@ router.get('/export-report', authenticateToken, generateWellnessReport);
 router.get('/analytics/mood-trends', authenticateToken, getMoodTrends as any);
 router.get('/analytics/mood-distribution', authenticateToken, getMoodDistribution as any);
 router.get('/analytics/summary', authenticateToken, getMoodSummary as any);
+
+// Assessment endpoints for PHQ-2/GAD-2 screening
+router.post('/assessment', authenticateToken, submitAssessment as any);
+router.get('/assessment/history', authenticateToken, getAssessmentHistory as any);
+router.get('/assessment/check-due', authenticateToken, checkAssessmentDue as any);
 
 export default router;

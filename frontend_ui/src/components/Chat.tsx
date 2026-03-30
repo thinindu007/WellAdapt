@@ -6,6 +6,7 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // Added for Rich Text/Eye-catching bubbles
 import { translations } from '../utils/translations';
 import BreathingSuggestionCard from './BreathingSuggestionCard';
+import SelfAssessmentModal from './SelfAssessmentModal';
 import '../App.css';
 
 // --- MODULAR IMPORTS ---
@@ -20,6 +21,7 @@ function Chat() {
     const [currentMood, setCurrentMood] = useState<string>('');
     const [isTyping, setIsTyping] = useState(false);
     const [showBreathingSuggestion, setShowBreathingSuggestion] = useState(false);
+    const [showAssessment, setShowAssessment] = useState(false);
 
     // --- NEW: MODULAR STATE ---
     const [showSOS, setShowSOS] = useState(false);
@@ -33,6 +35,7 @@ function Chat() {
     useEffect(() => {
         fetchSessions();
         startNewChat();
+        checkAssessmentDue();
     }, []);
 
     useEffect(() => {
@@ -48,6 +51,26 @@ function Chat() {
             setSessions(res.data);
         } catch (err) { console.error("Error fetching sessions"); }
     };
+
+    const checkAssessmentDue = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await axios.get('http://localhost:5000/api/chat/assessment/check-due', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (res.data.isDue) {
+                // Small delay so the chat loads first, then the modal appears gently
+                setTimeout(() => setShowAssessment(true), 2000);
+            }
+        } catch (err) {
+            // Silently fail — assessment is optional, should never block chat
+            console.log("Assessment check skipped");
+        }
+    };
+    // const checkAssessmentDue = async () => {
+    //     // TEMP: demo
+    //     setTimeout(() => setShowAssessment(true), 2000);
+    // };
 
     const startNewChat = () => {
         setMessages([{ text: lang === 'si' ? "ආයුබෝවන්! මම ඔබට උදව් කිරීමට මෙහි සිටිමි. ඔබට අද කොහොමද දැනෙන්නේ?" : "Hello! I'm here to support you. How are you feeling today?", sender: 'bot' }]);
@@ -198,6 +221,11 @@ function Chat() {
                 onClose={() => setShowSOS(false)}
                 lang={lang}
             />
+            <SelfAssessmentModal
+                isOpen={showAssessment}
+                onClose={() => setShowAssessment(false)}
+                lang={lang}
+            />
 
             <div className="chat-layout">
                 <aside className="sidebar">
@@ -205,15 +233,15 @@ function Chat() {
 
                     {/* NEW: PDF EXPORT BUTTON IN SIDEBAR */}
                     <button className="export-report-btn" onClick={handleExportPDF}>
-                        📊 {lang === 'si' ? 'මගේ සුවතා වාර්තාව' : 'Export My Wellness Report'}
+                        {lang === 'si' ? 'මගේ සුවතා වාර්තාව' : 'Export My Wellness Report'}
                     </button>
                     {/* NEW: Mood Dashboard Navigation */}
                     <button className="export-report-btn" onClick={() => navigate('/dashboard')}>
-                        📈 {lang === 'si' ? 'මනෝභාව දර්ශක පුවරුව' : 'My Mood Dashboard'}
+                        {lang === 'si' ? 'මනෝභාව දර්ශක පුවරුව' : 'My Mood Dashboard'}
                     </button>
                     {/* NEW: Breathing Exercise Navigation */}
                     <button className="export-report-btn" onClick={() => navigate('/breathing')}>
-                        🧘 {lang === 'si' ? 'ආශ්වාස අභ්‍යාස' : 'Breathing Exercises'}
+                        {lang === 'si' ? 'ආශ්වාස අභ්‍යාස' : 'Breathing Exercises'}
                     </button>
 
                     <div className="session-list">
