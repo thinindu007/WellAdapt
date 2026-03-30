@@ -5,6 +5,51 @@ import axios from 'axios';
 import { AuthRequest } from '../middleware/authMiddleware';
 
 /**
+ * Renders Markdown-formatted text into a PDFKit document.
+ * Handles: **bold**, * bullet points, and line breaks.
+ */
+function renderMarkdownToPDF(doc: PDFKit.PDFDocument, text: string, color: string = '#334155') {
+    const lines = text.split('\n');
+
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) {
+            doc.moveDown(0.3);
+            continue;
+        }
+
+        // Check if it's a bullet point (starts with * or -)
+        const isBullet = /^[\*\-]\s+/.test(trimmed);
+        const cleanLine = isBullet ? trimmed.replace(/^[\*\-]\s+/, '') : trimmed;
+
+        // Add bullet indent
+        if (isBullet) {
+            doc.fillColor(color).font('Helvetica').fontSize(10).text('', { continued: false });
+        }
+
+        // Parse bold segments: split by **...**
+        const segments = cleanLine.split(/(\*\*[^*]+\*\*)/g);
+        const prefix = isBullet ? '    • ' : '';
+
+        let isFirst = true;
+        for (const segment of segments) {
+            if (!segment) continue;
+
+            const isBold = segment.startsWith('**') && segment.endsWith('**');
+            const content = isBold ? segment.slice(2, -2) : segment;
+            const displayText = isFirst ? prefix + content : content;
+            const isLast = segment === segments[segments.length - 1];
+
+            doc.font(isBold ? 'Helvetica-Bold' : 'Helvetica')
+                .fillColor(isBold ? '#0f172a' : color)
+                .fontSize(10)
+                .text(displayText, { continued: !isLast, lineGap: 2 });
+
+            isFirst = false;
+        }
+    }
+}
+/**
  * Generates a comprehensive Wellness Report for the user.
  * This report acts as a bridge between the student and a university counselor.
  */
@@ -92,7 +137,7 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
         // Section 2: Stress Trigger Analysis
         doc.fillColor('#0369a1').fontSize(14).text('2. AI-Identified Stress Triggers', { underline: true });
         doc.moveDown();
-        doc.fillColor('#334155').fontSize(11).text(aiAnalysisResponse, { lineGap: 5 });
+        renderMarkdownToPDF(doc, aiAnalysisResponse, '#334155');
         doc.moveDown(2);
 
         // Section 3: Counseling Bridge (Situational Advice)
@@ -107,7 +152,9 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
         if (recentAdvice.length > 0) {
             recentAdvice.forEach((r: any, index: number) => {
                 doc.fillColor('#64748b').fontSize(10).text(`Scenario ${index + 1}: "${r.user_message.substring(0, 80)}${r.user_message.length > 80 ? '...' : ''}"`);
-                doc.fillColor('#1e293b').fontSize(10).text(`Guidance Provided: ${r.bot_response}`, { oblique: true });
+                doc.fillColor('#0369a1').font('Helvetica-Bold').fontSize(10).text('Guidance Provided:');
+                doc.font('Helvetica');
+                renderMarkdownToPDF(doc, r.bot_response, '#334155');
                 doc.moveDown();
             });
         } else {
