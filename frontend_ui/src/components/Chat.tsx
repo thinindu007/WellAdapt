@@ -22,6 +22,7 @@ function Chat() {
     const [isTyping, setIsTyping] = useState(false);
     const [showBreathingSuggestion, setShowBreathingSuggestion] = useState(false);
     const [showAssessment, setShowAssessment] = useState(false);
+    const [culturalTip, setCulturalTip] = useState<string | null>(null);
 
     // --- NEW: MODULAR STATE ---
     const [showSOS, setShowSOS] = useState(false);
@@ -162,6 +163,7 @@ function Chat() {
             setCurrentMood(data.emotion);
             setMessages(prev => [...prev, { text: data.reply || data.response, sender: 'bot' }]);
             setShowBreathingSuggestion(data.suggestBreathing || false);
+            setCulturalTip(data.culturalTip || null);
 
         } catch (err) {
             console.error("Chat Error:", err);
@@ -281,6 +283,25 @@ function Chat() {
                                 </div>
                             </div>
                         ))}
+                        {culturalTip && !isTyping && (
+                            <div className="cultural-tip-card">
+                                <div className="cultural-tip-header">
+                                    <span className="cultural-tip-icon">
+                                        {(() => {
+                                            const user = JSON.parse(localStorage.getItem('user') || '{}');
+                                            const icons: Record<string, string> = {
+                                                buddhist: '☸️', hindu: '🙏', muslim: '☪️', catholic: '✝️'
+                                            };
+                                            return icons[user.religion] || '🪷';
+                                        })()}
+                                    </span>
+                                    <span className="cultural-tip-title">
+                                        {lang === 'si' ? 'සංස්කෘතික සුවතා උපදෙස්' : 'Cultural Wellness Tip'}
+                                    </span>
+                                </div>
+                                <p className="cultural-tip-text">{culturalTip}</p>
+                            </div>
+                        )}
                         {showBreathingSuggestion && !isTyping && (
                             <BreathingSuggestionCard lang={lang} />
                         )}

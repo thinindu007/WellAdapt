@@ -8,7 +8,8 @@ const Register = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        preferredLanguage: 'en' // Default to English
+        preferredLanguage: 'en',
+        religion: ''
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -28,7 +29,8 @@ const Register = () => {
             await axios.post('http://localhost:5000/api/auth/register', {
                 email: formData.email,
                 password: formData.password,
-                preferredLanguage: formData.preferredLanguage // New field
+                preferredLanguage: formData.preferredLanguage,
+                religion: formData.religion
             });
 
             alert("Registration successful! Please login to continue.");
@@ -88,6 +90,22 @@ const Register = () => {
                         >
                             <option value="en">English</option>
                             <option value="si">සිංහල (Sinhala)</option>
+                        </select>
+                    </div>
+
+                    <div className="input-group-auth">
+                        <label>Religion (for culturally adaptive tips)</label>
+                        <select
+                            className="auth-select"
+                            value={formData.religion}
+                            onChange={(e) => setFormData({ ...formData, religion: e.target.value })}
+                            required
+                        >
+                            <option value="">Select your religion</option>
+                            <option value="buddhist">Buddhist</option>
+                            <option value="hindu">Hindu</option>
+                            <option value="muslim">Muslim</option>
+                            <option value="catholic">Catholic / Christian</option>
                         </select>
                     </div>
 

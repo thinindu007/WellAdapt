@@ -5,7 +5,7 @@ import { query } from '../config/db';
 
 export const register = async (req: Request, res: Response) => {
     // 1. Destructure the new preferredLanguage field
-    const { email, password, preferredLanguage } = req.body;
+    const { email, password, preferredLanguage, religion } = req.body;
 
     try {
         const userExists = await query('SELECT * FROM users WHERE email = $1', [email]);
@@ -18,8 +18,8 @@ export const register = async (req: Request, res: Response) => {
 
         // 2. Insert with language preference
         const newUser = await query(
-            'INSERT INTO users (email, password, preferred_language) VALUES ($1, $2, $3) RETURNING id, email, preferred_language',
-            [email, hashedPassword, preferredLanguage || 'en']
+            'INSERT INTO users (email, password, preferred_language, religion) VALUES ($1, $2, $3, $4) RETURNING id, email, preferred_language, religion',
+            [email, hashedPassword, preferredLanguage || 'en', religion || null]
         );
 
         res.status(201).json({ message: "User registered successfully", user: newUser.rows[0] });
@@ -47,7 +47,8 @@ export const login = async (req: Request, res: Response) => {
             user: {
                 id: user.id,
                 email: user.email,
-                language: user.preferred_language
+                language: user.preferred_language,
+                religion: user.religion
             }
         });
     } catch (err) {

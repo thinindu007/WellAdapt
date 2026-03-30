@@ -17,8 +17,9 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
 
     try {
         // 1. Fetch user's preferred language from the Database
-        const userResult = await query('SELECT preferred_language FROM users WHERE id = $1', [userId]);
+        const userResult = await query('SELECT preferred_language, religion FROM users WHERE id = $1', [userId]);
         userLang = userResult.rows[0]?.preferred_language || 'en';
+        const userReligion = userResult.rows[0]?.religion || 'buddhist';
 
         let detectedEmotion = "";
         let botResponse = "";
@@ -28,19 +29,17 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
             // --- SINHALA STRATEGY: LLaMA 3 Detects + Responds ---
             const ollamaResponse = await axios.post('http://localhost:11434/api/generate', {
                 model: "llama3",
-                prompt: `
-                    Role: You are "WellAdapt", a supportive Sinhala-speaking mental health counselor for university students.
-                    User Message: "${text}"
-                    
-                    Task:
-                    1. Identify the primary emotion (Stress, Anxiety, Depression, or Positive).
-                    2. Provide a warm, empathetic counselor response in SINHALA script.
-                    3. Include 2-3 practical wellness tips using a CLEAR BULLETED LIST (Markdown).
-                    
-                    STRICT FORMATTING RULE: 
-                    The very first word of your response MUST be the English emotion label followed by a pipe symbol | and then your Sinhala response.
-                    Example: Depression | ඔයාට දැනෙන මේ කණගාටුව ගැන මම ගොඩක් කණගාටුයි...
-                `,
+                prompt: `Role: You are "WellAdapt", a supportive Sinhala-speaking mental health counselor for university students.
+User Message: "${text}"
+
+Task:
+1. Identify the primary emotion (Stress, Anxiety, Depression, or Positive).
+2. Provide a warm, empathetic counselor response in SINHALA script.
+3. Include 2-3 practical wellness tips using a CLEAR BULLETED LIST (Markdown).
+
+STRICT FORMATTING RULE:
+The very first word of your response MUST be the English emotion label followed by a pipe symbol | and then your Sinhala response.
+Example: Depression | ඔයාට දැනෙන මේ කණගාටුව ගැන මම ගොඩක් කණගාටුයි...`,
                 stream: false
             });
 
@@ -59,18 +58,16 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
 
             const ollamaResponse = await axios.post('http://localhost:11434/api/generate', {
                 model: "llama3",
-                prompt: `
-                    Role: You are "WellAdapt", a supportive English-speaking mental health counselor for university students.
-                    User Message: "${text}"
-                    Detected Emotion: ${detectedEmotion}
+                prompt: `Role: You are "WellAdapt", a supportive English-speaking mental health counselor for university students.
+User Message: "${text}"
+Detected Emotion: ${detectedEmotion}
 
-                    Task: 
-                    1. Start with 1-2 sentences of warm empathy acknowledging their ${detectedEmotion}.
-                    2. Provide 2-3 practical wellness tips using a CLEAR BULLETED LIST (Markdown).
-                    3. End with 1 brief, encouraging sentence.
-                    4. Respond ONLY in English.
-                    5. Do not mention you are an AI.
-                `,
+Task:
+1. Start with 1-2 sentences of warm empathy acknowledging their ${detectedEmotion}.
+2. Provide 2-3 practical wellness tips using a CLEAR BULLETED LIST (Markdown).
+3. End with 1 brief, encouraging sentence.
+4. Respond ONLY in English.
+5. Do not mention you are an AI.`,
                 stream: false
             });
             botResponse = ollamaResponse.data.response;
@@ -82,6 +79,85 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
             [userId, text, botResponse, detectedEmotion, sessionId]
         );
 
+        // 2.5 Generate Culturally Adaptive Wellness Tip (Religion-Aware)
+        let culturalTip = "";
+        const emotionsForCulturalTip = ['Stress', 'Anxiety', 'Fear', 'Sadness', 'Sad', 'Depression', 'Anger', 'Angry'];
+
+        if (emotionsForCulturalTip.includes(detectedEmotion)) {
+            // Build religion-specific cultural context
+            const religiousContext: Record<string, string> = {
+                buddhist: `Buddhist Sri Lankan traditions:
+- Mindfulness practices: anapanasati (breath awareness), metta bhavana (loving-kindness meditation), walking meditation at a temple
+- Visiting the campus or nearby Bodhi tree for quiet reflection
+- Reciting Pirith or listening to Seth Pirith for calming the mind
+- Practicing the Five Precepts as a grounding framework
+- Seeking guidance from a Bhikkhu (monk) at the university temple
+- Reflecting on anicca (impermanence) — this stressful period will pass
+- Engaging in dana (giving/sharing) as a way to shift focus from personal stress
+- Sri Lankan Buddhist proverbs about patience and perseverance`,
+
+                hindu: `Hindu Sri Lankan traditions:
+- Morning or evening puja (prayer ritual) at home or the campus kovil for centering the mind
+- Practicing pranayama (yogic breathing) — especially Nadi Shodhana (alternate nostril breathing)
+- Reciting a personal mantra or the Gayatri Mantra for focus and calm
+- Lighting a lamp (deepam) as a meditative practice to bring clarity
+- Seeking blessings at a Ganesh or Saraswati shrine for academic success
+- Practicing yoga asanas for stress relief — even 10 minutes helps
+- Reflecting on the Bhagavad Gita's teaching about focusing on effort, not outcomes (Karma Yoga)
+- Sharing concerns with family — the joint family system is a source of strength`,
+
+                muslim: `Muslim Sri Lankan traditions:
+- Performing Salah (prayer) mindfully as a structured break for reflection and peace
+- Making Dhikr (remembrance of Allah) — repetitive phrases for calming anxiety
+- Reciting or listening to Quran, especially Surah Ar-Rahman or Surah Ad-Duha for comfort
+- Making Dua (personal prayer) to express worries and seek guidance
+- Practicing Tawakkul (trust in Allah's plan) — surrendering worry about outcomes
+- Connecting with the campus Muslim community for group Jummah prayer and support
+- Sharing a meal with friends — communal eating is deeply valued in Muslim culture
+- Seeking advice from an elder or Moulavi who understands academic pressures`,
+
+                catholic: `Catholic/Christian Sri Lankan traditions:
+- Taking a moment for personal prayer or visiting the campus chapel for quiet reflection
+- Praying the Rosary as a meditative, repetitive practice that calms the mind
+- Reading Psalms for comfort — especially Psalm 23 ("The Lord is my shepherd") or Philippians 4:6-7
+- Lighting a candle at church and offering your academic worries to God
+- Attending Sunday Mass or a weekday service for community support and spiritual grounding
+- Practicing the Examen (Ignatian reflection) at the end of each day to process emotions
+- Reaching out to a parish priest or campus Christian fellowship for guidance
+- Remembering "Cast all your anxiety on Him, because He cares for you" (1 Peter 5:7)`
+            };
+
+            const context = religiousContext[userReligion] || religiousContext['buddhist'];
+
+            try {
+                const culturalResponse = await axios.post('http://localhost:11434/api/generate', {
+                    model: "llama3",
+                    prompt: `You are a cultural wellness advisor for Sri Lankan university students.
+
+The student is feeling: ${detectedEmotion}
+Their message: "${text}"
+Their religion: ${userReligion}
+
+Using ONLY the following cultural and religious context, provide ONE short coping tip (2-3 sentences MAX):
+
+${context}
+
+RULES:
+- Write in English but reference the student's religious/cultural practices naturally
+- Keep it warm, personal, and specific to Sri Lankan university student life
+- Maximum 2-3 sentences
+- Write ONLY the tip itself — no introduction like "Here's a tip" or "As a ${userReligion}"
+- Do NOT give generic Western advice like "try journaling"
+- Make it feel like advice from a caring Sri Lankan elder who understands both faith and academic pressure`,
+                    stream: false
+                });
+                culturalTip = culturalResponse.data.response.trim();
+            } catch (culturalError) {
+                console.log("Cultural tip generation skipped:", culturalError);
+                culturalTip = "";
+            }
+        }
+
         // 3. Return response to Frontend
         const suggestBreathing = ['Stress', 'Anxiety', 'Fear', 'Depression'].includes(detectedEmotion);
 
@@ -90,7 +166,8 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
             emotion: detectedEmotion,
             reply: botResponse,
             sessionId: sessionId,
-            suggestBreathing: suggestBreathing
+            suggestBreathing: suggestBreathing,
+            culturalTip: culturalTip || null
         });
 
     } catch (error: any) {
@@ -109,11 +186,11 @@ export const getUserSessions = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
     try {
         const result = await query(
-            `SELECT session_id, MIN(timestamp) as start_time, 
+            `SELECT session_id, MIN(timestamp) as start_time,
              (SELECT user_message FROM chat_history ch2 WHERE ch2.session_id = ch1.session_id ORDER BY timestamp ASC LIMIT 1) as title
              FROM chat_history ch1
-             WHERE user_id = $1 
-             GROUP BY session_id 
+             WHERE user_id = $1
+             GROUP BY session_id
              ORDER BY start_time DESC`,
             [userId]
         );
