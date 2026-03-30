@@ -204,6 +204,10 @@ function Chat() {
                     <button className="export-report-btn" onClick={handleExportPDF}>
                         📊 {lang === 'si' ? 'මගේ සුවතා වාර්තාව' : 'Export My Wellness Report'}
                     </button>
+                    {/* NEW: Mood Dashboard Navigation */}
+                    <button className="export-report-btn" onClick={() => navigate('/dashboard')}>
+                        📈 {lang === 'si' ? 'මනෝභාව දර්ශක පුවරුව' : 'My Mood Dashboard'}
+                    </button>
 
                     <div className="session-list">
                         <p className="sidebar-label">{t.history}</p>

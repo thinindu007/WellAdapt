@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Chat from './components/Chat';
+import MoodDashboard from './components/MoodDashboard';
 import './App.css';
 
 // --- PROTECTED ROUTE COMPONENT ---
@@ -35,7 +36,15 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        {/* Protected Mood Dashboard Route */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <MoodDashboard />
+            </ProtectedRoute>
+          }
+        />
         {/* Redirect unknown paths or root to Login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
