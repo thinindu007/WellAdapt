@@ -14,7 +14,7 @@ router.get('/sessions', authenticateToken, getUserSessions as any);
 // Endpoint to load a specific chat
 router.get('/sessions/:sessionId', authenticateToken, getSessionMessages as any);
 
-// Main chat endpoint
+// chat endpoint
 router.post('/', authenticateToken, handleChat as any);
 
 router.delete('/sessions/:sessionId', authenticateToken, deleteSession as any);

@@ -2,11 +2,9 @@ import { Response } from 'express';
 import { query } from '../config/db';
 import { AuthRequest } from '../middleware/authMiddleware';
 
-/**
- * GET /api/chat/analytics/mood-trends
- * Returns daily emotion counts for the last 30 days.
- * Used by the Mood Dashboard line/area chart.
- */
+
+// GET /api/chat/analytics/mood-trends
+
 export const getMoodTrends = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
 
@@ -36,10 +34,9 @@ export const getMoodTrends = async (req: AuthRequest, res: Response) => {
     }
 };
 
-/**
- * GET /api/chat/analytics/mood-distribution
- * Returns the overall emotion distribution (for donut/pie chart).
- */
+
+// GET /api/chat/analytics/mood-distribution
+
 export const getMoodDistribution = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
 
@@ -68,11 +65,9 @@ export const getMoodDistribution = async (req: AuthRequest, res: Response) => {
     }
 };
 
-/**
- * GET /api/chat/analytics/summary
- * Returns summary stats: total messages, most frequent emotion,
- * session count, and recent mood streak.
- */
+
+// GET /api/chat/analytics/summary
+
 export const getMoodSummary = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
 
@@ -106,7 +101,7 @@ export const getMoodSummary = async (req: AuthRequest, res: Response) => {
             [userId]
         );
 
-        // Most recent 5 emotions (for streak display)
+        // Most recent 5 emotions
         const recentEmotions = await query(
             `SELECT emotion, timestamp
              FROM chat_history
@@ -117,7 +112,7 @@ export const getMoodSummary = async (req: AuthRequest, res: Response) => {
             [userId]
         );
 
-        // Daily activity (messages per day for last 7 days)
+        // Daily activity 
         const weeklyActivity = await query(
             `SELECT 
                 DATE(timestamp) as date,

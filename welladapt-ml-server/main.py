@@ -9,24 +9,22 @@ from pydantic import BaseModel
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.layers import Layer
 
-# --- 0. Initialize Environment & GPU ---
+# Initialize Environment & GPU 
 load_dotenv()
 
 # Prevent TensorFlow from consuming all GPU VRAM at once
-# This allows your Node.js and LLaMA 3 to share the 4GB RTX 3050 Ti
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
     try:
         for gpu in gpus:
             tf.config.experimental.set_memory_growth(gpu, True)
-        print("✅ GPU Memory Growth Enabled")
+        print(" GPU Memory Growth Enabled")
     except RuntimeError as e:
-        print(f"⚠️ GPU Config Error: {e}")
+        print(f" GPU Config Error: {e}")
 
 app = FastAPI(title="WellAdapt ML API - Final Production Version")
 
-# --- 1. Custom Attention Layer ---
-# This must exist to load models trained with the custom 'AttentionLayer'
+# to load models trained with the custom 'AttentionLayer'
 class AttentionLayer(Layer):
     def __init__(self, **kwargs):
         super(AttentionLayer, self).__init__(**kwargs)
@@ -42,7 +40,6 @@ class AttentionLayer(Layer):
         output = x * a
         return tf.keras.backend.sum(output, axis=1)
 
-# --- 2. Load Wellness Assets ---
 print("🚀 Loading English & Sinhala Models into VRAM...")
 
 try:
@@ -56,18 +53,18 @@ try:
     with open('tokenizer_si.pkl', 'rb') as f: si_tokenizer = pickle.load(f)
     with open('label_encoder_si.pkl', 'rb') as f: si_le = pickle.load(f)
     
-    print("✅ All Models Loaded Successfully.")
+    print(" All Models Loaded Successfully.")
 except Exception as e:
-    print(f"❌ Error Loading Assets: {e}")
+    print(f" Error Loading Assets: {e}")
 
-# --- 3. Preprocessing Functions (Logic-Matched to Training) ---
+# Preprocessing Functions
 
 def preprocess_english(text):
     # Cleaning Phase
     text = str(text).lower()
     text = re.sub(r'http\S+|www\S+|https\S+|\@\w+|\#', '', text)
     
-    # Normalize Contractions (Ensures 'don't' becomes 'dont' for the negation handler)
+    # Normalize Contractions
     contractions = {
         "don't": "dont", "can't": "cant", "won't": "wont",
         "wasn't": "wasnt", "haven't": "havent", "isn't": "isnt",
@@ -80,7 +77,7 @@ def preprocess_english(text):
     
     text = re.sub(r"[^a-z\s]", '', text).strip()
     
-    # Negation Handling Phase (Underscore joining)
+    # Negation Handling Phase
     negation_set = {'not', 'no', 'never', 'nothing', 'dont', 'cant', 'wont', 'wasnt', 'havent'}
     words = text.split()
     result = []
@@ -101,7 +98,7 @@ def preprocess_sinhala(text):
     text = re.sub(r'[^\u0D80-\u0DFF\s]', '', text)
     text = re.sub(r'\s+', ' ', text).strip()
     
-    # Negation Handling Phase (Join adjective with negation marker)
+    # Negation Handling Phase
     neg_markers = ['නැහැ', 'නැත', 'නොවේ', 'එපා', 'නැති', 'නෑ']
     words = text.split()
     result = []
@@ -115,7 +112,7 @@ def preprocess_sinhala(text):
         i += 1
     return ' '.join(result)
 
-# --- 4. API Definition ---
+# API Definition
 
 class ChatRequest(BaseModel):
     text: str

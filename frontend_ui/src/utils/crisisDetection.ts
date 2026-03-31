@@ -9,16 +9,16 @@ export const isCrisisMessage = (text: string): boolean => {
         'cutting', 'want to die', 'end it all', 'hanging'
     ];
 
-    // Sinhala high-risk keywords (Commonly used phrases for distress)
+    // Sinhala high-risk keywords
     const sinhalaKeywords = [
-        'මැරෙන්න', // marenna (die)
-        'මරන්න',   // maranna (kill)
-        'ජීවිතේ එපා', // jiwithe epa (tired of life)
-        'දිවි නසා', // diwi nasa (suicide)
-        'ජීවත් වෙලා වැඩක් නැහැ' // jiwath wela wadak naha (no point living)
+        'මැරෙන්න',
+        'මරන්න',
+        'ජීවිතේ එපා',
+        'දිවි නසා',
+        'ජීවත් වෙලා වැඩක් නැහැ'
     ];
 
-    // Check if any keyword exists in the text
+    // Check keyword in the text
     const hasEnglishCrisis = englishKeywords.some(keyword => lowerText.includes(keyword));
     const hasSinhalaCrisis = sinhalaKeywords.some(keyword => lowerText.includes(keyword));
 

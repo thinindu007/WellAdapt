@@ -5,10 +5,10 @@ import Register from './pages/Register';
 import Chat from './components/Chat';
 import MoodDashboard from './components/MoodDashboard';
 import BreathingExercise from './components/BreathingExercise';
+import StudyPlanner from './components/StudyPlanner';
 import './App.css';
 
-// --- PROTECTED ROUTE COMPONENT ---
-// This checks if a user token exists in LocalStorage
+// checks if a user token exists in LocalStorage
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const token = localStorage.getItem('token');
 
@@ -47,7 +47,8 @@ function App() {
           }
         />
         <Route path="/breathing" element={<ProtectedRoute><BreathingExercise /></ProtectedRoute>} />
-        {/* Redirect unknown paths or root to Login */}
+        <Route path="/study-planner" element={<ProtectedRoute><StudyPlanner /></ProtectedRoute>} />
+        {/* Redirect unknown path / root to Login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>

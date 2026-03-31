@@ -9,7 +9,7 @@ interface Props {
     lang: 'en' | 'si';
 }
 
-// --- Clinically Validated Questions ---
+// Clinically Validated Questions
 // PHQ-2: Kroenke, Spitzer & Williams (2003). The Patient Health Questionnaire-2.
 // GAD-2: Kroenke, Spitzer, Williams & Löwe (2007). Anxiety disorders in primary care.
 
@@ -121,7 +121,7 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
         <div className="assessment-overlay" onClick={handleClose}>
             <div className="assessment-modal" onClick={e => e.stopPropagation()}>
 
-                {/* --- INTRO SCREEN --- */}
+                {/* INTRO SCREEN */}
                 {step === 'intro' && (
                     <div className="assessment-intro">
                         <div className="assessment-badge">📋</div>
@@ -145,7 +145,7 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                     </div>
                 )}
 
-                {/* --- QUESTIONS SCREEN --- */}
+                {/* QUESTIONS SCREEN */}
                 {step === 'questions' && (
                     <div className="assessment-questions">
                         {/* Progress Bar */}
@@ -224,7 +224,7 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                     </div>
                 )}
 
-                {/* --- RESULTS SCREEN --- */}
+                {/* RESULTS SCREEN */}
                 {step === 'results' && results && (
                     <div className="assessment-results">
                         <div className="results-header">

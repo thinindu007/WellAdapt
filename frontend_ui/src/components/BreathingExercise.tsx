@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './BreathingExercise.css';
 
-// --- Breathing Technique Definitions ---
+// Breathing Technique Definitions
 interface BreathingTechnique {
     id: string;
     name: { en: string; si: string };
@@ -79,7 +79,7 @@ function BreathingExercise() {
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const audioContextRef = useRef<AudioContext | null>(null);
 
-    // --- Web Audio API: Generate a soft tone ---
+    // Web Audio API: Generate a soft tone
     const playTone = useCallback((frequency: number, duration: number) => {
         if (!soundEnabled) return;
         try {
@@ -121,7 +121,7 @@ function BreathingExercise() {
         setTimeout(() => playTone(783.99, 0.3), 300);
     }, [playTone]);
 
-    // --- Timer Logic ---
+    // Timer Logic
     useEffect(() => {
         if (!isActive || isPaused) return;
 
@@ -164,7 +164,7 @@ function BreathingExercise() {
         };
     }, [isActive, isPaused, countdown, currentPhaseIndex, currentRound, selectedTechnique, playPhaseTransition, playCompletionChime]);
 
-    // --- Controls ---
+    // Controls
     const startExercise = () => {
         setIsActive(true);
         setIsPaused(false);
@@ -197,7 +197,7 @@ function BreathingExercise() {
         setIsComplete(false);
     };
 
-    // --- Compute animation state ---
+    // Compute animation state
     const currentPhase = selectedTechnique.phases[currentPhaseIndex];
     const getCircleScale = (): number => {
         if (!isActive) return 0.6;
@@ -208,7 +208,7 @@ function BreathingExercise() {
         return phase.type === 'hold' ? (currentPhaseIndex === 1 ? 1.0 : 0.6) : 0.8;
     };
 
-    // --- Total exercise time calculation ---
+    // Total exercise time calculation
     const totalExerciseSeconds = selectedTechnique.phases.reduce((sum, p) => sum + p.duration, 0) * selectedTechnique.rounds;
     const progressPercent = isActive ? (totalSecondsElapsed / totalExerciseSeconds) * 100 : 0;
 
@@ -306,10 +306,10 @@ function BreathingExercise() {
                         )}
                     </div>
 
-                    {/* --- Center: Animated Breathing Circle --- */}
+                    {/* Animated Breathing Circle */}
                     <div className="breathing-circle-area">
                         {isComplete ? (
-                            /* --- Completion Screen --- */
+                            /* Completion Screen */
                             <div className="completion-screen">
                                 <div className="completion-icon">✨</div>
                                 <h3>{lang === 'si' ? 'සම්පූර්ණයි!' : 'Well Done!'}</h3>
@@ -332,9 +332,9 @@ function BreathingExercise() {
                                 </div>
                             </div>
                         ) : (
-                            /* --- Active Breathing Circle --- */
+                            /* Active Breathing Circle */
                             <>
-                                {/* Progress ring (background) */}
+                                {/* Progress ring */}
                                 {isActive && (
                                     <svg className="progress-ring" viewBox="0 0 300 300">
                                         <circle
@@ -422,7 +422,7 @@ function BreathingExercise() {
                     </div>
                 </div>
 
-                {/* --- Tip Section --- */}
+                {/* Tip Section */}
                 <div className="breathing-tip">
                     <span className="tip-icon">💡</span>
                     <p>

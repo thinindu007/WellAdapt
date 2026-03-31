@@ -26,7 +26,7 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
         let mlConfidence = 0;
 
         if (userLang === 'si') {
-            // --- SINHALA STRATEGY: LLaMA 3 Detects + Responds ---
+            // SINHALA STRATEGY: LLaMA 3 Detects + Responds
             const ollamaResponse = await axios.post('http://localhost:11434/api/generate', {
                 model: "llama3",
                 prompt: `Role: You are "WellAdapt", a supportive Sinhala-speaking mental health counselor for university students.
@@ -50,8 +50,8 @@ Example: Depression | ඔයාට දැනෙන මේ කණගාටුව 
             botResponse = parts[1] ? parts[1].trim() : rawResponse;
 
         } else {
-            // --- ENGLISH STRATEGY: FastAPI Detects -> LLaMA 3 Responds ---
-            // Detect emotion via your CNN-LSTM FastAPI server
+            // ENGLISH STRATEGY: LLaMA 3 Responds 
+            // Detect emotion via CNN-LSTM FastAPI server
             const mlResponse = await axios.post('http://localhost:8000/predict/english', { text });
             detectedEmotion = mlResponse.data.emotion;
             const mlConfidence = mlResponse.data.confidence || 0;
@@ -79,7 +79,7 @@ Task:
             [userId, text, botResponse, detectedEmotion, sessionId]
         );
 
-        // 2.5 Generate Culturally Adaptive Wellness Tip (Religion-Aware)
+        // Generate Culturally Adaptive Wellness Tip 
         let culturalTip = "";
         const emotionsForCulturalTip = ['Stress', 'Anxiety', 'Fear', 'Sadness', 'Sad', 'Depression', 'Anger', 'Angry'];
 
@@ -170,6 +170,19 @@ RULES:
             culturalTip: culturalTip || null
         });
 
+        const suggestStudyPlan = ['Stress', 'Anxiety'].includes(detectedEmotion) &&
+            text.toLowerCase().match(/exam|study|test|assignment|deadline|submit|viva|presentation/);
+
+        return res.status(200).json({
+            status: "success",
+            emotion: detectedEmotion,
+            reply: botResponse,
+            sessionId: sessionId,
+            suggestBreathing: suggestBreathing,
+            culturalTip: culturalTip || null,
+            suggestStudyPlan: !!suggestStudyPlan
+        });
+
     } catch (error: any) {
         console.error("System Error:", error.message);
         return res.status(500).json({
@@ -181,7 +194,7 @@ RULES:
     }
 };
 
-// --- Fetch all session titles for sidebar ---
+// Fetch all session titles for sidebar
 export const getUserSessions = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
     try {
@@ -200,7 +213,7 @@ export const getUserSessions = async (req: AuthRequest, res: Response) => {
     }
 };
 
-// --- Fetch messages for a specific session ---
+// Fetch messages for a specific session
 export const getSessionMessages = async (req: AuthRequest, res: Response) => {
     const { sessionId } = req.params;
     const userId = req.userId;
@@ -215,7 +228,7 @@ export const getSessionMessages = async (req: AuthRequest, res: Response) => {
     }
 };
 
-// --- Delete a session ---
+// Delete a session
 export const deleteSession = async (req: AuthRequest, res: Response) => {
     const { sessionId } = req.params;
     const userId = req.userId;

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { translations } from '../utils/translations'; // Import the translation utility
+import { translations } from '../utils/translations';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -10,7 +10,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    // 1. Check if there is a saved language preference, otherwise default to English
+    //Check if there is a saved language preference, otherwise default to English
     const [currentLang, setCurrentLang] = useState<'en' | 'si'>(
         (localStorage.getItem('lang') as 'en' | 'si') || 'en'
     );
@@ -21,28 +21,28 @@ const Login = () => {
         setError('');
 
         try {
-            // 2. Send credentials to Node.js backend
+            //Send credentials to backend
             const response = await axios.post('http://localhost:5000/api/auth/login', {
                 email,
                 password
             });
 
-            // 3. Save the JWT token, user info, and the language preference
+            // Save the JWT token, user info, and the language preference
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
 
-            // This is the key part: Save the language returned from the DB
-            const userLang = response.data.user.language; // 'en' or 'si'
+            // Save the language returned from the DB
+            const userLang = response.data.user.language;
             localStorage.setItem('lang', userLang);
 
-            // 4. Navigate to the chat interface
+            // Navigate to the chat interface
             navigate('/chat');
         } catch (err: any) {
             setError(err.response?.data?.error || 'Login failed. Please check your connection.');
         }
     };
 
-    // Optional: Function to toggle language on the login page itself
+    //toggle language on the login page 
     const toggleLanguage = (lang: 'en' | 'si') => {
         setCurrentLang(lang);
         localStorage.setItem('lang', lang);

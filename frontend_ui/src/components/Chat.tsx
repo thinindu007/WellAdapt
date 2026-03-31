@@ -3,13 +3,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import ReactMarkdown from 'react-markdown'; // Added for Rich Text/Eye-catching bubbles
+import ReactMarkdown from 'react-markdown';
 import { translations } from '../utils/translations';
 import BreathingSuggestionCard from './BreathingSuggestionCard';
 import SelfAssessmentModal from './SelfAssessmentModal';
 import '../App.css';
 
-// --- MODULAR IMPORTS ---
+// MODULAR IMPORTS
 import EmergencyContactModal from '../components/EmergencyContactModal';
 import { isCrisisMessage } from '../utils/crisisDetection';
 
@@ -24,7 +24,7 @@ function Chat() {
     const [showAssessment, setShowAssessment] = useState(false);
     const [culturalTip, setCulturalTip] = useState<string | null>(null);
 
-    // --- NEW: MODULAR STATE ---
+    //MODULAR STATE
     const [showSOS, setShowSOS] = useState(false);
 
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -60,11 +60,9 @@ function Chat() {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.data.isDue) {
-                // Small delay so the chat loads first, then the modal appears gently
                 setTimeout(() => setShowAssessment(true), 2000);
             }
         } catch (err) {
-            // Silently fail — assessment is optional, should never block chat
             console.log("Assessment check skipped");
         }
     };
@@ -125,9 +123,7 @@ function Chat() {
 
         const userMsg = input;
 
-        // ==========================================================
-        // STEP 3 INTEGRATION: CLIENT-SIDE SAFETY INTERCEPTOR
-        // ==========================================================
+        // CLIENT-SIDE SAFETY INTERCEPTOR
         if (isCrisisMessage(userMsg)) {
             setMessages(prev => [...prev, { text: userMsg, sender: 'user' }]);
             setInput('');
@@ -180,7 +176,7 @@ function Chat() {
         navigate('/login');
     };
 
-    // --- PDF EXPORT FEATURE ---
+    // PDF EXPORT FEATURE
     const handleExportPDF = async () => {
         try {
             const token = localStorage.getItem('token');
@@ -188,13 +184,13 @@ function Chat() {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
-                responseType: 'blob', // Crucial: Tells Axios to handle binary data
+                responseType: 'blob',
             });
 
-            // 1. Create a URL for the blob data
+            // Create a URL for the blob data
             const url = window.URL.createObjectURL(new Blob([response.data]));
 
-            // 2. Create a temporary "a" tag to trigger download
+            // Create a temporary "a" tag to trigger download
             const link = document.createElement('a');
             link.href = url;
 
@@ -202,7 +198,7 @@ function Chat() {
             const date = new Date().toISOString().split('T')[0];
             link.setAttribute('download', `WellAdapt_Wellness_Report_${date}.pdf`);
 
-            // 3. Append to body, click, and remove
+            // Append to body, click, and remove
             document.body.appendChild(link);
             link.click();
 
@@ -233,17 +229,21 @@ function Chat() {
                 <aside className="sidebar">
                     <button className="new-chat-btn" onClick={startNewChat}>{t.newChat}</button>
 
-                    {/* NEW: PDF EXPORT BUTTON IN SIDEBAR */}
+                    {/* PDF EXPORT BUTTON IN SIDEBAR */}
                     <button className="export-report-btn" onClick={handleExportPDF}>
                         {lang === 'si' ? 'මගේ සුවතා වාර්තාව' : 'Export My Wellness Report'}
                     </button>
-                    {/* NEW: Mood Dashboard Navigation */}
+                    {/* Mood Dashboard Navigation */}
                     <button className="export-report-btn" onClick={() => navigate('/dashboard')}>
                         {lang === 'si' ? 'මනෝභාව දර්ශක පුවරුව' : 'My Mood Dashboard'}
                     </button>
-                    {/* NEW: Breathing Exercise Navigation */}
+                    {/* Breathing Exercise Navigation */}
                     <button className="export-report-btn" onClick={() => navigate('/breathing')}>
                         {lang === 'si' ? 'ආශ්වාස අභ්‍යාස' : 'Breathing Exercises'}
+                    </button>
+                    {/* Study Planner Navigation */}
+                    <button className="export-report-btn" onClick={() => navigate('/study-planner')}>
+                        {lang === 'si' ? 'අධ්‍යයන සැලසුම්කරු' : 'Study Planner'}
                     </button>
 
                     <div className="session-list">
@@ -277,7 +277,6 @@ function Chat() {
                     <div className="message-area">
                         {messages.map((m, i) => (
                             <div key={i} className={`message ${m.sender}`}>
-                                {/* UPDATED: USING REACT-MARKDOWN FOR EYE-CATCHING BUBBLES */}
                                 <div className="markdown-content">
                                     <ReactMarkdown>{m.text}</ReactMarkdown>
                                 </div>

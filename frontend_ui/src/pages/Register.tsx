@@ -18,14 +18,14 @@ const Register = () => {
         e.preventDefault();
         setError('');
 
-        // 1. Validation: Match Passwords
+        //Validation: Match Passwords
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match.');
             return;
         }
 
         try {
-            // 2. Send registration data including preferredLanguage to Node.js backend
+            // Send registration data to backend
             await axios.post('http://localhost:5000/api/auth/register', {
                 email: formData.email,
                 password: formData.password,
@@ -80,7 +80,7 @@ const Register = () => {
                         />
                     </div>
 
-                    {/* NEW: Preferred Language Dropdown */}
+                    {/* Preferred Language Dropdown */}
                     <div className="input-group-auth">
                         <label>Preferred Language</label>
                         <select

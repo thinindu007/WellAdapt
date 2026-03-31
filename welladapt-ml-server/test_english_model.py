@@ -5,7 +5,7 @@ import re
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.layers import Layer
 
-# --- 1. Define Custom Attention Layer (Required for Loading) ---
+#Define Custom Attention Layer
 class AttentionLayer(Layer):
     def __init__(self, **kwargs):
         super(AttentionLayer, self).__init__(**kwargs)
@@ -21,9 +21,9 @@ class AttentionLayer(Layer):
         output = x * a
         return tf.keras.backend.sum(output, axis=1)
 
-# --- 2. Load the Saved Components ---
+# Load the Saved Components
 print("Loading Hybrid CNN-LSTM model and assets...")
-# We use 'best_english_model.h5' as it's the one with the highest validation accuracy
+#use 'best_english_model.h5' because highest validation accuracy
 model = tf.keras.models.load_model('best_english_model.h5', custom_objects={'AttentionLayer': AttentionLayer})
 
 with open('tokenizer_en.pkl', 'rb') as f:
@@ -32,7 +32,7 @@ with open('tokenizer_en.pkl', 'rb') as f:
 with open('label_encoder_en.pkl', 'rb') as f:
     label_encoder = pickle.load(f)
 
-# --- 3. Preprocessing Functions (MUST MATCH TRAINING EXACTLY) ---
+#Preprocessing Functions
 
 def clean_text(text):
     text = str(text).lower()
@@ -75,19 +75,17 @@ def handle_negations(text):
             i += 1
     return ' '.join(result)
 
-# --- 4. Prediction Logic ---
+#Prediction Logic
 
 def predict_emotion(sentence):
-    # CRISIS DETECTION: Immediate hardcoded safety check
+    #Immediate hardcoded safety check
     crisis_keywords = ['kill myself', 'end my life', 'suicide', 'self harm', 'want to die']
     if any(k in sentence.lower() for k in crisis_keywords):
         return "CRISIS ⚠️", 100.0
 
     # ML PIPELINE
     cleaned = clean_text(sentence)
-    negated = handle_negations(cleaned) # This is the crucial step
-    
-    # Debug print to see what the model actually "reads"
+    negated = handle_negations(cleaned)
     # print(f"[DEBUG] Preprocessed: {negated}") 
 
     sequence = tokenizer.texts_to_sequences([negated])
@@ -100,7 +98,7 @@ def predict_emotion(sentence):
     
     return emotion, confidence
 
-# --- 5. Interactive Test Loop ---
+#Interactive Test Loop
 print("\n--- Hybrid (CNN + Bi-LSTM + Attention) Emotion Test ---")
 print("Pre-processing: Negation Joining (e.g., 'not_happy') Enabled")
 print("Type 'quit' to exit.")

@@ -5,7 +5,7 @@ import re
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.layers import Layer
 
-# --- 1. Define Custom Attention Layer (Required for loading) ---
+# Define Custom Attention Layer
 class AttentionLayer(Layer):
     def __init__(self, **kwargs):
         super(AttentionLayer, self).__init__(**kwargs)
@@ -18,7 +18,7 @@ class AttentionLayer(Layer):
         a = tf.keras.backend.softmax(e, axis=1)
         return tf.keras.backend.sum(x * a, axis=1)
 
-# --- 2. Load Assets ---
+#Load Assets
 print("Loading Sinhala Hybrid Model...")
 model = tf.keras.models.load_model('best_sinhala_model.h5', custom_objects={'AttentionLayer': AttentionLayer})
 
@@ -27,7 +27,7 @@ with open('tokenizer_si.pkl', 'rb') as f:
 with open('label_encoder_si.pkl', 'rb') as f:
     label_encoder = pickle.load(f)
 
-# --- 3. Preprocessing (Must match Training) ---
+#Preprocessing
 
 def clean_si(text):
     text = str(text)
@@ -57,7 +57,7 @@ def predict_sinhala_emotion(sentence):
     cleaned = clean_si(sentence)
     negated = handle_si_negations(cleaned)
     
-    # print(f"[DEBUG] Model sees: {negated}") # Uncomment to see the underscore joining
+    # print(f"[DEBUG] Model sees: {negated}")
 
     sequence = tokenizer.texts_to_sequences([negated])
     padded = pad_sequences(sequence, maxlen=100)
@@ -69,17 +69,17 @@ def predict_sinhala_emotion(sentence):
     
     return emotion, confidence
 
-# --- 4. Interactive Test ---
+#Interactive Test
 print("\n--- Sinhala Hybrid Emotion Test ---")
 print("Type 'quit' to exit.")
 
 test_cases = [
-    "මට අද ගොඩක් සතුටුයි", # I am very happy today
-    "මට කිසිම සතුටක් දැනෙන්නේ නැහැ", # I don't feel any happiness
-    "විභාගය නිසා මම ලොකු පීඩනයක ඉන්නේ", # I am under a lot of pressure because of the exam
-    "id මට හරිම තනිකමක් දැනෙනවා", # id I feel very lonely (Testing 'id' removal)
-    "මට ජීවිතය එපා වෙලා තියෙන්නේ", # I am tired of life (Common depression phrase)
-    "මම මේ දේවල් ගැන ගොඩක් බයයි" # I'm very scared about these things
+    "මට අද ගොඩක් සතුටුයි", 
+    "මට කිසිම සතුටක් දැනෙන්නේ නැහැ", 
+    "විභාගය නිසා මම ලොකු පීඩනයක ඉන්නේ",
+    "id මට හරිම තනිකමක් දැනෙනවා",
+    "මට ජීවිතය එපා වෙලා තියෙන්නේ",
+    "මම මේ දේවල් ගැන ගොඩක් බයයි"
 ]
 
 print("\n--- Running Baseline Tests ---")

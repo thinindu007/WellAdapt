@@ -10,7 +10,7 @@ import {
 import { translations } from '../utils/translations';
 import './MoodDashboard.css';
 
-// --- Emotion Color Map (consistent across all charts) ---
+// Emotion Color Map
 const EMOTION_COLORS: Record<string, string> = {
     'Joy': '#34d399',
     'Happy': '#34d399',
@@ -34,7 +34,7 @@ const getEmotionColor = (emotion: string): string => {
     return EMOTION_COLORS[emotion] || '#64748b';
 };
 
-// --- Emotion Emoji Map ---
+// Emotion Emoji Map
 const EMOTION_EMOJIS: Record<string, string> = {
     'Joy': '😊', 'Happy': '😊', 'Happiness': '😊',
     'Love': '💜', 'Surprise': '😲',
@@ -87,7 +87,7 @@ function MoodDashboard() {
         }
     };
 
-    // --- Transform trend data for the stacked area chart ---
+    // Transform trend data for the stacked area chart
     const getFilteredTrendData = () => {
         const daysAgo = parseInt(activeTimeRange);
         const cutoff = new Date();
@@ -114,7 +114,7 @@ function MoodDashboard() {
         };
     };
 
-    // --- Custom Tooltip for Area Chart ---
+    // Custom Tooltip for Area Chart
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
@@ -131,7 +131,7 @@ function MoodDashboard() {
         return null;
     };
 
-    // --- Custom Tooltip for Pie Chart ---
+    // Custom Tooltip for Pie Chart
     const PieTooltip = ({ active, payload }: any) => {
         if (active && payload && payload.length) {
             const data = payload[0];
@@ -167,7 +167,7 @@ function MoodDashboard() {
     return (
         <div className="app-root">
             <div className="dashboard-layout">
-                {/* --- Navigation Header --- */}
+                {/* Navigation Header */}
                 <header className="dashboard-header">
                     <div className="dashboard-header-left">
                         <button className="back-to-chat-btn" onClick={() => navigate('/chat')}>
@@ -199,7 +199,7 @@ function MoodDashboard() {
                     </div>
                 ) : (
                     <>
-                        {/* --- Summary Cards Row --- */}
+                        {/* Summary Cards Row */}
                         <div className="summary-cards">
                             <div className="summary-card">
                                 <span className="summary-icon">💬</span>
@@ -252,7 +252,7 @@ function MoodDashboard() {
                             </div>
                         </div>
 
-                        {/* --- Main Chart: Emotion Trend Over Time --- */}
+                        {/* Emotion Trend Over Time */}
                         <div className="chart-section">
                             <div className="chart-header">
                                 <h3>{lang === 'si' ? '📈 කාල මනෝභාව ප්‍රවණතා' : '📈 Mood Trends Over Time'}</h3>
@@ -308,7 +308,6 @@ function MoodDashboard() {
                             </div>
                         </div>
 
-                        {/* --- Bottom Row: Pie Chart + Weekly Activity --- */}
                         <div className="charts-row">
                             {/* Emotion Distribution Pie Chart */}
                             <div className="chart-section half-chart">
@@ -394,7 +393,7 @@ function MoodDashboard() {
                             </div>
                         </div>
 
-                        {/* --- Emotion Legend / Key --- */}
+                        {/* Emotion Legend / Key */}
                         <div className="emotion-legend-section">
                             <h4>{lang === 'si' ? 'මනෝභාව යතුර' : 'Emotion Key'}</h4>
                             <div className="emotion-legend-grid">

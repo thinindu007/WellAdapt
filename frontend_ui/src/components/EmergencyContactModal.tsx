@@ -1,4 +1,3 @@
-// src/components/EmergencyContactModal.tsx
 import React from 'react';
 import { translations } from '../utils/translations';
 

@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils import resample
 
-# --- 0. GPU Memory Growth ---
+# GPU Memory Growth
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
     try:
@@ -22,7 +22,7 @@ if gpus:
     except RuntimeError as e:
         print(e)
 
-# --- 1. Load and Map Dataset ---
+#Load and Map Dataset
 print("Loading dataset...")
 df = pd.read_csv('datasets/english_emotions.csv')
 
@@ -31,7 +31,7 @@ label_map = {0: 'Depression', 1: 'Positive', 2: 'Positive', 3: 'Stress', 4: 'Anx
 df['mapped_label'] = df['label'].map(label_map)
 df = df.dropna(subset=['mapped_label'])
 
-# --- 2. Preprocessing & Selective Oversampling ---
+#Preprocessing & Selective Oversampling
 
 def clean_text(text):
     text = str(text).lower()
@@ -71,8 +71,6 @@ def handle_negations(text):
 print("Applying Cleaning...")
 df['text'] = df['text'].apply(clean_text)
 
-# --- FIX: Selective Oversampling ---
-# We do this after clean_text so contractions (dont, cant) match our keywords perfectly.
 negation_keywords = ['not', 'no', 'nothing', 'never', "dont", "cant", "wont", "wasnt"]
 
 print("Performing Selective Oversampling for Wellness Intelligence...")
@@ -82,14 +80,14 @@ mask = (df['text'].str.contains('|'.join(negation_keywords), case=False, na=Fals
 hard_examples = df[mask]
 print(f"Oversampling {len(hard_examples)} VALID negative-negations...")
 
-# Tripling the valid negations to give them 3x the 'voting power'
+# Tripling the valid negations
 df = pd.concat([df, hard_examples, hard_examples], ignore_index=True)
 
-# APPLYING NEGATION JOINING (The underscore trick)
+# APPLYING NEGATION JOINING
 print("Applying negation handling (underscores)...")
 df['text'] = df['text'].apply(handle_negations)
 
-# --- 3. Strict Class Balancing ---
+# Strict Class Balancing
 print("Applying strict class balancing...")
 min_class = df['mapped_label'].value_counts().min()
 max_positive = int(min_class * 1.5)
@@ -109,7 +107,7 @@ for label in df['mapped_label'].unique():
 df = balanced_df.sample(frac=1).reset_index(drop=True)
 print(f"Final Class Distribution:\n{df['mapped_label'].value_counts()}\n")
 
-# --- 4. Tokenization & Model ---
+# Tokenization & Model
 max_words = 20000
 max_len = 100
 
@@ -156,7 +154,7 @@ def build_model():
 
 model = build_model()
 
-# --- 5. Training ---
+#5. Training
 callbacks = [
     EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True),
     ModelCheckpoint('best_english_model.h5', monitor='val_accuracy', save_best_only=True)
@@ -165,7 +163,7 @@ callbacks = [
 print("\nStarting Hybrid CNN-LSTM Training...")
 history = model.fit(X_train, y_train, epochs=15, batch_size=128, validation_split=0.1, callbacks=callbacks)
 
-# --- 6. Save ---
+# 6. Save
 model.save('english_emotion_model.h5')
 with open('tokenizer_en.pkl', 'wb') as f:
     pickle.dump(tokenizer, f)

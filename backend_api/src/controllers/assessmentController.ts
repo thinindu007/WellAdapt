@@ -5,17 +5,12 @@ import { AuthRequest } from '../middleware/authMiddleware';
 /**
  * POST /api/chat/assessment
  * Submits a PHQ-2 + GAD-2 self-assessment response.
- * 
- * PHQ-2 (Depression screening): 2 questions, each scored 0-3. Total 0-6. Score >= 3 = positive screen.
- * GAD-2 (Anxiety screening):   2 questions, each scored 0-3. Total 0-6. Score >= 3 = positive screen.
- * 
- * Reference: Kroenke et al. (2003), Kroenke et al. (2007)
  */
 export const submitAssessment = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
     const { phq2_q1, phq2_q2, gad2_q1, gad2_q2 } = req.body;
 
-    // Validate inputs (each must be 0-3)
+    // Validate inputs
     const scores = [phq2_q1, phq2_q2, gad2_q1, gad2_q2];
     if (scores.some(s => s === undefined || s === null || s < 0 || s > 3)) {
         return res.status(400).json({ error: "Each score must be between 0 and 3." });
@@ -63,10 +58,9 @@ export const submitAssessment = async (req: AuthRequest, res: Response) => {
     }
 };
 
-/**
- * GET /api/chat/assessment/history
- * Returns all assessments for the authenticated user, ordered by most recent.
- */
+
+// GET /api/chat/assessment/history
+
 export const getAssessmentHistory = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
 
@@ -90,14 +84,9 @@ export const getAssessmentHistory = async (req: AuthRequest, res: Response) => {
     }
 };
 
-/**
- * GET /api/chat/assessment/check-due
- * Determines whether the user should be prompted for a new assessment.
- * Trigger logic: Show assessment if:
- *   - User has never completed one, OR
- *   - Last assessment was more than 7 days ago, OR
- *   - User has had 5+ chat sessions since last assessment
- */
+
+// GET /api/chat/assessment/check-due
+
 export const checkAssessmentDue = async (req: AuthRequest, res: Response) => {
     const userId = req.userId;
 
@@ -109,8 +98,8 @@ export const checkAssessmentDue = async (req: AuthRequest, res: Response) => {
         );
 
         if (lastAssessment.rows.length === 0) {
-            // Never completed — check if they have at least 3 chat sessions first
-            // (don't prompt brand new users)
+            // check if they have at least 3 chat sessions first
+            // don't prompt brand new users
             const sessionCount = await query(
                 `SELECT COUNT(DISTINCT session_id)::int as count FROM chat_history WHERE user_id = $1`,
                 [userId]

@@ -1,41 +1,34 @@
-/* ================================================================
-   WellAdapt — Professional Dark Theme
-   ================================================================ */
-
 /* === COLOR SYSTEM === */
 :root {
   /* Backgrounds */
-  --bg-dark:      #080d18;
-  --bg-surface:   #0d1424;
-  --card-dark:    #101827;
-  --card-elevated:#1a2335;
+  --bg-dark: #080d18;
+  --bg-surface: #0d1424;
+  --card-dark: #101827;
+  --card-elevated: #1a2335;
 
   /* Accents */
-  --accent-blue:       #38bdf8;
-  --accent-blue-dim:   rgba(56, 189, 248, 0.1);
-  --accent-blue-glow:  rgba(56, 189, 248, 0.2);
-  --accent-blue-border:rgba(56, 189, 248, 0.25);
-  --accent-purple:     #a78bfa;
-  --accent-green:      #34d399;
+  --accent-blue: #38bdf8;
+  --accent-blue-dim: rgba(56, 189, 248, 0.1);
+  --accent-blue-glow: rgba(56, 189, 248, 0.2);
+  --accent-blue-border: rgba(56, 189, 248, 0.25);
+  --accent-purple: #a78bfa;
+  --accent-green: #34d399;
 
   /* Bubbles */
-  --user-bubble:  #1d4ed8;
-  --bot-bubble:   #1a2335;
+  --user-bubble: #1d4ed8;
+  --bot-bubble: #1a2335;
 
   /* Text */
-  --text-main:      #e2e8f0;
+  --text-main: #e2e8f0;
   --text-secondary: #94a3b8;
-  --text-dim:       #4b5a6e;
+  --text-dim: #4b5a6e;
 
   /* Borders */
-  --border-subtle:  rgba(255, 255, 255, 0.04);
+  --border-subtle: rgba(255, 255, 255, 0.04);
   --border-default: rgba(255, 255, 255, 0.08);
-  --border-muted:   rgba(255, 255, 255, 0.12);
+  --border-muted: rgba(255, 255, 255, 0.12);
 }
 
-/* ================================================================
-   BASE
-   ================================================================ */
 body {
   margin: 0;
   background-color: var(--bg-dark);
@@ -43,9 +36,6 @@ body {
   color: var(--text-main);
 }
 
-/* ================================================================
-   APP ROOT — ambient gradient backdrop
-   ================================================================ */
 .app-root {
   display: flex;
   align-items: center;
@@ -58,9 +48,6 @@ body {
     var(--bg-dark);
 }
 
-/* ================================================================
-   AUTH PAGES
-   ================================================================ */
 .auth-card {
   background: rgba(16, 24, 39, 0.88);
   backdrop-filter: blur(28px);
@@ -75,7 +62,7 @@ body {
     0 24px 48px rgba(0, 0, 0, 0.55);
 }
 
-/* --- Brand identity block at top of auth card --- */
+/* Brand identity block at top of auth card */
 .auth-brand {
   display: flex;
   flex-direction: column;
@@ -89,8 +76,8 @@ body {
   height: 54px;
   border-radius: 15px;
   background: linear-gradient(135deg,
-    rgba(56, 189, 248, 0.18) 0%,
-    rgba(167, 139, 250, 0.18) 100%);
+      rgba(56, 189, 248, 0.18) 0%,
+      rgba(167, 139, 250, 0.18) 100%);
   border: 1px solid rgba(56, 189, 248, 0.3);
   display: flex;
   align-items: center;
@@ -259,9 +246,6 @@ body {
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
 }
 
-/* ================================================================
-   GLOBAL INPUTS & BUTTONS
-   ================================================================ */
 input {
   flex: 1;
   background: rgba(255, 255, 255, 0.04);
@@ -306,9 +290,6 @@ button:active {
   transform: scale(0.97);
 }
 
-/* ================================================================
-   CHAT LAYOUT
-   ================================================================ */
 .chat-layout {
   display: flex;
   width: 98%;
@@ -323,9 +304,6 @@ button:active {
     0 32px 64px rgba(0, 0, 0, 0.65);
 }
 
-/* ================================================================
-   SIDEBAR
-   ================================================================ */
 .sidebar {
   width: 260px;
   background: var(--bg-surface);
@@ -506,8 +484,8 @@ button:active {
 header {
   padding: 16px 24px;
   background: linear-gradient(180deg,
-    rgba(20, 28, 46, 0.97) 0%,
-    rgba(16, 24, 39, 0.97) 100%);
+      rgba(20, 28, 46, 0.97) 0%,
+      rgba(16, 24, 39, 0.97) 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.055);
   display: flex;
   justify-content: space-between;
@@ -561,9 +539,6 @@ header h2 {
   opacity: 1;
 }
 
-/* ================================================================
-   MESSAGES
-   ================================================================ */
 .message-area {
   flex: 1;
   overflow-y: auto;
@@ -612,13 +587,29 @@ header h2 {
 }
 
 /* Markdown content inside messages */
-.markdown-content p            { margin: 0; }
-.markdown-content p + p        { margin-top: 6px; }
+.markdown-content p {
+  margin: 0;
+}
+
+.markdown-content p+p {
+  margin-top: 6px;
+}
+
 .markdown-content ul,
-.markdown-content ol           { margin: 6px 0; padding-left: 20px; }
-.markdown-content li           { margin-bottom: 3px; }
-.markdown-content strong       { font-weight: 700; }
-.markdown-content code         {
+.markdown-content ol {
+  margin: 6px 0;
+  padding-left: 20px;
+}
+
+.markdown-content li {
+  margin-bottom: 3px;
+}
+
+.markdown-content strong {
+  font-weight: 700;
+}
+
+.markdown-content code {
   background: rgba(255, 255, 255, 0.1);
   padding: 2px 6px;
   border-radius: 4px;
@@ -630,9 +621,6 @@ header h2 {
   word-wrap: break-word;
 }
 
-/* ================================================================
-   INPUT GROUP
-   ================================================================ */
 .input-group {
   padding: 14px 20px;
   background: rgba(8, 13, 24, 0.85);
@@ -674,9 +662,6 @@ header h2 {
   opacity: 1;
 }
 
-/* ================================================================
-   HELPLINE PANEL
-   ================================================================ */
 .helpline-panel {
   width: 258px;
   background: var(--bg-surface);
@@ -764,9 +749,6 @@ header h2 {
   font-weight: 600;
 }
 
-/* ================================================================
-   TYPING INDICATOR
-   ================================================================ */
 .typing-indicator {
   display: flex;
   gap: 4px;
@@ -784,36 +766,66 @@ header h2 {
   animation: typing 1.2s infinite ease-in-out;
 }
 
-.typing-indicator span:nth-of-type(1) { animation-delay: 0s; }
-.typing-indicator span:nth-of-type(2) { animation-delay: 0.18s; }
-.typing-indicator span:nth-of-type(3) { animation-delay: 0.36s; }
+.typing-indicator span:nth-of-type(1) {
+  animation-delay: 0s;
+}
 
-/* ================================================================
-   ANIMATIONS
-   ================================================================ */
+.typing-indicator span:nth-of-type(2) {
+  animation-delay: 0.18s;
+}
+
+.typing-indicator span:nth-of-type(3) {
+  animation-delay: 0.36s;
+}
+
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes glow {
-  from { box-shadow: 0 0 6px rgba(56, 189, 248, 0.15); }
-  to   { box-shadow: 0 0 18px rgba(56, 189, 248, 0.4); }
+  from {
+    box-shadow: 0 0 6px rgba(56, 189, 248, 0.15);
+  }
+
+  to {
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.4);
+  }
 }
 
 @keyframes typing {
-  0%, 100% { transform: translateY(0);  opacity: 0.4; }
-  50%       { transform: translateY(-5px); opacity: 1;   }
+
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
 }
 
 @keyframes modalBounce {
-  0%   { transform: scale(0.85); opacity: 0; }
-  100% { transform: scale(1);    opacity: 1; }
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-/* ================================================================
-   EMERGENCY / SOS MODAL
-   ================================================================ */
 .sos-overlay {
   position: fixed;
   inset: 0;
@@ -914,9 +926,6 @@ header h2 {
   opacity: 1;
 }
 
-/* ================================================================
-   CRISIS MODAL (Tailwind fallback)
-   ================================================================ */
 .fixed.inset-0 {
   backdrop-filter: blur(4px);
 }
