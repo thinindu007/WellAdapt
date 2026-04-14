@@ -174,7 +174,7 @@ function MoodDashboard() {
                             ← {lang === 'si' ? 'චැට් එකට ආපසු' : 'Back to Chat'}
                         </button>
                         <h2 className="dashboard-title">
-                            {lang === 'si' ? '📊 මගේ සුවතා දර්ශක පුවරුව' : '📊 My Wellness Dashboard'}
+                            {lang === 'si' ? ' මගේ සුවතා දර්ශක පුවරුව' : ' My Wellness Dashboard'}
                         </h2>
                     </div>
                     <div className="dashboard-header-right">
@@ -202,7 +202,7 @@ function MoodDashboard() {
                         {/* Summary Cards Row */}
                         <div className="summary-cards">
                             <div className="summary-card">
-                                <span className="summary-icon">💬</span>
+                                <span className="summary-icon"></span>
                                 <div className="summary-info">
                                     <span className="summary-value">{summary?.totalMessages || 0}</span>
                                     <span className="summary-label">
@@ -212,7 +212,7 @@ function MoodDashboard() {
                             </div>
 
                             <div className="summary-card">
-                                <span className="summary-icon">🧠</span>
+                                <span className="summary-icon"></span>
                                 <div className="summary-info">
                                     <span className="summary-value">{summary?.sessionCount || 0}</span>
                                     <span className="summary-label">
@@ -236,7 +236,7 @@ function MoodDashboard() {
                             </div>
 
                             <div className="summary-card">
-                                <span className="summary-icon">🔥</span>
+                                <span className="summary-icon"></span>
                                 <div className="summary-info">
                                     <div className="recent-streak">
                                         {summary?.recentEmotions?.slice(0, 5).map((item: any, idx: number) => (
@@ -255,7 +255,7 @@ function MoodDashboard() {
                         {/* Emotion Trend Over Time */}
                         <div className="chart-section">
                             <div className="chart-header">
-                                <h3>{lang === 'si' ? '📈 කාල මනෝභාව ප්‍රවණතා' : '📈 Mood Trends Over Time'}</h3>
+                                <h3>{lang === 'si' ? ' කාල මනෝභාව ප්‍රවණතා' : ' Mood Trends Over Time'}</h3>
                                 <div className="time-range-toggle">
                                     {(['7', '14', '30'] as const).map(range => (
                                         <button
@@ -312,7 +312,7 @@ function MoodDashboard() {
                             {/* Emotion Distribution Pie Chart */}
                             <div className="chart-section half-chart">
                                 <div className="chart-header">
-                                    <h3>{lang === 'si' ? '🎯 මනෝභාව බෙදාහැරීම' : '🎯 Emotion Distribution'}</h3>
+                                    <h3>{lang === 'si' ? ' මනෝභාව බෙදාහැරීම' : ' Emotion Distribution'}</h3>
                                 </div>
                                 <div className="chart-container pie-container">
                                     <ResponsiveContainer width="100%" height={280}>
@@ -355,7 +355,7 @@ function MoodDashboard() {
                             {/* Weekly Activity Bar Chart */}
                             <div className="chart-section half-chart">
                                 <div className="chart-header">
-                                    <h3>{lang === 'si' ? '📅 සතිපතා ක්‍රියාකාරිත්වය' : '📅 Weekly Activity'}</h3>
+                                    <h3>{lang === 'si' ? ' සතිපතා ක්‍රියාකාරිත්වය' : ' Weekly Activity'}</h3>
                                 </div>
                                 <div className="chart-container">
                                     {summary?.weeklyActivity && summary.weeklyActivity.length > 0 ? (

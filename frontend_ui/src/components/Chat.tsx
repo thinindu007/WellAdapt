@@ -53,23 +53,23 @@ function Chat() {
         } catch (err) { console.error("Error fetching sessions"); }
     };
 
-    const checkAssessmentDue = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/chat/assessment/check-due', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            if (res.data.isDue) {
-                setTimeout(() => setShowAssessment(true), 2000);
-            }
-        } catch (err) {
-            console.log("Assessment check skipped");
-        }
-    };
     // const checkAssessmentDue = async () => {
-    //     // TEMP: demo
-    //     setTimeout(() => setShowAssessment(true), 2000);
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         const res = await axios.get('http://localhost:5000/api/chat/assessment/check-due', {
+    //             headers: { Authorization: `Bearer ${token}` }
+    //         });
+    //         if (res.data.isDue) {
+    //             setTimeout(() => setShowAssessment(true), 2000);
+    //         }
+    //     } catch (err) {
+    //         console.log("Assessment check skipped");
+    //     }
     // };
+    const checkAssessmentDue = async () => {
+        // TEMP: demo
+        setTimeout(() => setShowAssessment(true), 2000);
+    };
 
     const startNewChat = () => {
         setMessages([{ text: lang === 'si' ? "ආයුබෝවන්! මම ඔබට උදව් කිරීමට මෙහි සිටිමි. ඔබට අද කොහොමද දැනෙන්නේ?" : "Hello! I'm here to support you. How are you feeling today?", sender: 'bot' }]);

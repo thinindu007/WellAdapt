@@ -132,7 +132,7 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                                 : 'Take 1 minute to check in with yourself. These 4 questions are based on the clinically validated PHQ-2 and GAD-2 screening tools used by mental health professionals worldwide.'}
                         </p>
                         <div className="assessment-meta">
-                            <span>⏱️ {lang === 'si' ? 'මිනිත්තු 1ක්' : '~1 minute'}</span>
+                            <span>⏱️ {lang === 'si' ? 'මිනිත්තු 1ක්' : '1 minute'}</span>
                             <span>🔒 {lang === 'si' ? 'සම්පූර්ණයෙන්ම පෞද්ගලික' : 'Completely private'}</span>
                             <span>📊 {lang === 'si' ? 'ඔබේ වාර්තාවට එකතු වේ' : 'Added to your wellness report'}</span>
                         </div>

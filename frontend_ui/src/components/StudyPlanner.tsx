@@ -174,12 +174,12 @@ function StudyPlanner() {
                             ← {lang === 'si' ? 'ආපසු' : 'Back to Chat'}
                         </button>
                         <h2 className="planner-title">
-                            📚 {lang === 'si' ? 'ස්මාර්ට් අධ්‍යයන සැලසුම්කරු' : 'Smart Study Planner'}
+                            {lang === 'si' ? 'ස්මාර්ට් අධ්‍යයන සැලසුම්කරු' : 'Smart Study Planner'}
                         </h2>
                     </div>
                     {view === 'schedule' && (
                         <button className="delete-plan-btn" onClick={handleDeletePlan}>
-                            🗑️ {lang === 'si' ? 'සැලැස්ම මකන්න' : 'Reset Plan'}
+                            {lang === 'si' ? 'සැලැස්ම මකන්න' : 'Reset Plan'}
                         </button>
                     )}
                 </header>
@@ -357,7 +357,7 @@ function StudyPlanner() {
                         <div className="daily-tasks">
                             <h4>
                                 {selectedDate === new Date().toISOString().split('T')[0]
-                                    ? (lang === 'si' ? '📋 අද කාලසටහන' : '📋 Today\'s Schedule')
+                                    ? (lang === 'si' ? ' අද කාලසටහන' : ' Today\'s Schedule')
                                     : `📋 ${new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}`}
                             </h4>
 
@@ -392,7 +392,7 @@ function StudyPlanner() {
 
                         {/* Subject Overview */}
                         <div className="subject-overview">
-                            <h4>{lang === 'si' ? '📊 විෂය දළ විసර්ජනය' : '📊 Subject Overview'}</h4>
+                            <h4>{lang === 'si' ? ' විෂය දළ විసර්ජනය' : ' Subject Overview'}</h4>
                             <div className="subject-cards">
                                 {plan.subjects.map((s: any) => {
                                     const subjectTasks = plan.tasks.filter((t: any) => t.subject_id === s.id);

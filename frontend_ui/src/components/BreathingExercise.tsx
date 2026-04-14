@@ -232,7 +232,7 @@ function BreathingExercise() {
                             ← {lang === 'si' ? 'චැට් එකට ආපසු' : 'Back to Chat'}
                         </button>
                         <h2 className="breathing-title">
-                            {lang === 'si' ? '🧘 සන්සුන්කම අභ්‍යාස' : '🧘 Mindfulness Exercises'}
+                            {lang === 'si' ? ' සන්සුන්කම අභ්‍යාස' : ' Mindfulness Exercises'}
                         </h2>
                     </div>
                     <button
