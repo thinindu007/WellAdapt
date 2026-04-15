@@ -1,5 +1,6 @@
 import React from 'react';
 import { translations } from '../utils/translations';
+import { getEmoji } from '../utils/emoji';
 
 interface EmergencyContactModalProps {
     isOpen: boolean;
@@ -17,7 +18,7 @@ const EmergencyContactModal: React.FC<EmergencyContactModalProps> = ({ isOpen, o
         <div className="sos-overlay">
             <div className="sos-modal">
                 <div className="sos-header">
-                    <span className="warning-icon">⚠️</span>
+                    <span className="warning-icon">{getEmoji('warning')}</span>
                     <h2>{lang === 'si' ? 'හදිසි උපකාර අවශ්‍යද?' : 'Need Immediate Support?'}</h2>
                 </div>
 
@@ -34,7 +35,7 @@ const EmergencyContactModal: React.FC<EmergencyContactModalProps> = ({ isOpen, o
                             <strong>1926 - National Helpline</strong>
                             <span>National Institute of Mental Health</span>
                         </div>
-                        <a href="tel:1926" className="sos-call-btn">📞 Call 1926</a>
+                        <a href="tel:1926" className="sos-call-btn">{getEmoji('telephone_receiver')} Call 1926</a>
                     </div>
 
                     {/* Sumithrayo */}
@@ -43,7 +44,7 @@ const EmergencyContactModal: React.FC<EmergencyContactModalProps> = ({ isOpen, o
                             <strong>Sumithrayo</strong>
                             <span>Crisis Support & Suicide Prevention</span>
                         </div>
-                        <a href="tel:0112696666" className="sos-call-btn">📞 Call Now</a>
+                        <a href="tel:0112696666" className="sos-call-btn">{getEmoji('telephone_receiver')} Call Now</a>
                     </div>
                 </div>
 

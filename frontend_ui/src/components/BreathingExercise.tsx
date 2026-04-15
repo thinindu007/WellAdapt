@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getEmoji } from '../utils/emoji';
 import './BreathingExercise.css';
 
 // Breathing Technique Definitions
@@ -240,7 +241,7 @@ function BreathingExercise() {
                         onClick={() => setSoundEnabled(prev => !prev)}
                         title={soundEnabled ? 'Mute audio cues' : 'Enable audio cues'}
                     >
-                        {soundEnabled ? '🔊' : '🔇'}
+                        {soundEnabled ? getEmoji('loud_sound') : getEmoji('mute')}
                     </button>
                 </header>
 
@@ -311,7 +312,7 @@ function BreathingExercise() {
                         {isComplete ? (
                             /* Completion Screen */
                             <div className="completion-screen">
-                                <div className="completion-icon">✨</div>
+                                <div className="completion-icon">{getEmoji('sparkles')}</div>
                                 <h3>{lang === 'si' ? 'සම්පූර්ණයි!' : 'Well Done!'}</h3>
                                 <p>
                                     {lang === 'si'
@@ -319,15 +320,15 @@ function BreathingExercise() {
                                         : `You completed ${selectedTechnique.rounds} rounds of ${selectedTechnique.name.en}. You should feel calmer now.`}
                                 </p>
                                 <div className="completion-stats">
-                                    <span>⏱️ {Math.floor(totalSecondsElapsed / 60)}m {totalSecondsElapsed % 60}s</span>
-                                    <span>🔄 {selectedTechnique.rounds} {lang === 'si' ? 'වට' : 'rounds'}</span>
+                                    <span>{getEmoji('stopwatch')} {Math.floor(totalSecondsElapsed / 60)}m {totalSecondsElapsed % 60}s</span>
+                                    <span>{getEmoji('arrows_counterclockwise')} {selectedTechnique.rounds} {lang === 'si' ? 'වට' : 'rounds'}</span>
                                 </div>
                                 <div className="completion-actions">
                                     <button className="restart-btn" onClick={startExercise}>
-                                        🔄 {lang === 'si' ? 'නැවත ආරම්භ කරන්න' : 'Restart'}
+                                        {getEmoji('arrows_counterclockwise')} {lang === 'si' ? 'නැවත ආරම්භ කරන්න' : 'Restart'}
                                     </button>
                                     <button className="back-chat-btn" onClick={() => navigate('/chat')}>
-                                        💬 {lang === 'si' ? 'චැට් එකට යන්න' : 'Back to Chat'}
+                                        {getEmoji('speech_balloon')} {lang === 'si' ? 'චැට් එකට යන්න' : 'Back to Chat'}
                                     </button>
                                 </div>
                             </div>
@@ -424,7 +425,7 @@ function BreathingExercise() {
 
                 {/* Tip Section */}
                 <div className="breathing-tip">
-                    <span className="tip-icon">💡</span>
+                    <span className="tip-icon">{getEmoji('bulb')}</span>
                     <p>
                         {lang === 'si'
                             ? 'වඩාත් ඵලදායී ප්‍රතිඵල සඳහා, සුවපහසු ඉරියව්වකින් වාඩිවී, ඇස් පියන්න, සහ නාසයෙන් හුස්ම ගන්න.'

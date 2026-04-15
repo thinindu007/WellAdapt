@@ -40,7 +40,7 @@ class AttentionLayer(Layer):
         output = x * a
         return tf.keras.backend.sum(output, axis=1)
 
-print("🚀 Loading English & Sinhala Models into VRAM...")
+print(" Loading English & Sinhala Models into VRAM...")
 
 try:
     # English Assets

@@ -26,7 +26,7 @@ if gpus:
 print("Loading dataset...")
 df = pd.read_csv('datasets/english_emotions.csv')
 
-# Mapping: Sadness(0)→Depression | Joy(1)+Love(2)→Positive | Anger(3)+Surprise(5)→Stress | Fear(4)→Anxiety
+# Mapping:
 label_map = {0: 'Depression', 1: 'Positive', 2: 'Positive', 3: 'Stress', 4: 'Anxiety', 5: 'Stress'}
 df['mapped_label'] = df['label'].map(label_map)
 df = df.dropna(subset=['mapped_label'])

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { getEmoji } from '../utils/emoji';
 import './StudyPlanner.css';
 
 // Subject Color Palette
@@ -188,7 +189,7 @@ function StudyPlanner() {
                 {view === 'setup' && (
                     <div className="planner-setup">
                         <div className="setup-intro">
-                            <div className="setup-icon">🎯</div>
+                            <div className="setup-icon">{getEmoji('dart')}</div>
                             <h3>{lang === 'si' ? 'ඔබේ අධ්‍යයන සැලැස්ම සාදන්න' : 'Create Your Study Plan'}</h3>
                             <p>{lang === 'si'
                                 ? 'ඔබේ විභාග සහ ලබා ගත හැකි කාලය ඇතුළත් කරන්න. අපි ඔබට ප්‍රශස්ත අධ්‍යයන කාලසටහනක් ජනනය කරන්නෙමු.'
@@ -197,7 +198,7 @@ function StudyPlanner() {
 
                         {/* Time Preferences */}
                         <div className="setup-section">
-                            <h4>⏰ {lang === 'si' ? 'ඔබේ දෛනික කාලසටහන' : 'Your Daily Schedule'}</h4>
+                            <h4>{getEmoji('alarm_clock')} {lang === 'si' ? 'ඔබේ දෛනික කාලසටහන' : 'Your Daily Schedule'}</h4>
                             <div className="time-grid">
                                 <div className="form-field">
                                     <label>{lang === 'si' ? 'අවදි වන වේලාව' : 'Wake Up Time'}</label>
@@ -229,7 +230,7 @@ function StudyPlanner() {
 
                         {/* Subjects */}
                         <div className="setup-section">
-                            <h4>📝 {lang === 'si' ? 'ඔබේ විභාග' : 'Your Exams'}</h4>
+                            <h4>{getEmoji('memo')} {lang === 'si' ? 'ඔබේ විභාග' : 'Your Exams'}</h4>
                             {subjects.map((s, i) => (
                                 <div key={i} className="subject-row">
                                     <div className="subject-color" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
@@ -276,7 +277,7 @@ function StudyPlanner() {
                         >
                             {isSubmitting
                                 ? (lang === 'si' ? 'ජනනය වෙමින්...' : 'Generating...')
-                                : (lang === 'si' ? '🚀 මගේ සැලැස්ම ජනනය කරන්න' : '🚀 Generate My Study Plan')}
+                                : `${getEmoji('rocket')} ${lang === 'si' ? 'මගේ සැලැස්ම ජනනය කරන්න' : 'Generate My Study Plan'}`}
                         </button>
                     </div>
                 )}
@@ -287,7 +288,7 @@ function StudyPlanner() {
                         {/* Stats Bar */}
                         <div className="stats-bar">
                             <div className="stat-card level-card">
-                                <span className="stat-emoji">⭐</span>
+                                <span className="stat-emoji">{getEmoji('star2')}</span>
                                 <div>
                                     <span className="stat-number">Lv.{getLevel().level}</span>
                                     <span className="stat-desc">{getLevel().title}</span>
@@ -297,21 +298,21 @@ function StudyPlanner() {
                                 </div>
                             </div>
                             <div className="stat-card">
-                                <span className="stat-emoji">🏆</span>
+                                <span className="stat-emoji">{getEmoji('trophy')}</span>
                                 <div>
                                     <span className="stat-number">{plan.stats.totalPoints}</span>
                                     <span className="stat-desc">{lang === 'si' ? 'ලකුණු' : 'Points'}</span>
                                 </div>
                             </div>
                             <div className="stat-card">
-                                <span className="stat-emoji">🔥</span>
+                                <span className="stat-emoji">{getEmoji('fire')}</span>
                                 <div>
                                     <span className="stat-number">{plan.stats.currentStreak}</span>
                                     <span className="stat-desc">{lang === 'si' ? 'දින ධාවනය' : 'Day Streak'}</span>
                                 </div>
                             </div>
                             <div className="stat-card">
-                                <span className="stat-emoji">✅</span>
+                                <span className="stat-emoji">{getEmoji('white_check_mark')}</span>
                                 <div>
                                     <span className="stat-number">{plan.stats.completionRate}%</span>
                                     <span className="stat-desc">{lang === 'si' ? 'සම්පූර්ණ' : 'Complete'}</span>
@@ -319,7 +320,7 @@ function StudyPlanner() {
                             </div>
                             {getDaysUntilNextExam() && (
                                 <div className="stat-card exam-countdown">
-                                    <span className="stat-emoji">📅</span>
+                                    <span className="stat-emoji">{getEmoji('date')}</span>
                                     <div>
                                         <span className="stat-number">{getDaysUntilNextExam()?.daysLeft}d</span>
                                         <span className="stat-desc">{getDaysUntilNextExam()?.subject_name}</span>
@@ -358,7 +359,7 @@ function StudyPlanner() {
                             <h4>
                                 {selectedDate === new Date().toISOString().split('T')[0]
                                     ? (lang === 'si' ? ' අද කාලසටහන' : ' Today\'s Schedule')
-                                    : `📋 ${new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}`}
+                                    : `${getEmoji('clipboard')} ${new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}`}
                             </h4>
 
                             {getTodayTasks().length === 0 ? (

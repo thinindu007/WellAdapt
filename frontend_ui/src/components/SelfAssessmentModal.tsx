@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import axios from 'axios';
+import { getEmoji } from '../utils/emoji';
 import './SelfAssessmentModal.css';
 
 interface Props {
@@ -124,7 +125,7 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                 {/* INTRO SCREEN */}
                 {step === 'intro' && (
                     <div className="assessment-intro">
-                        <div className="assessment-badge">📋</div>
+                        <div className="assessment-badge">{getEmoji('clipboard')}</div>
                         <h2>{lang === 'si' ? 'ඔබ කොහොමද?' : 'How Are You Feeling?'}</h2>
                         <p className="assessment-intro-desc">
                             {lang === 'si'
@@ -132,9 +133,9 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                                 : 'Take 1 minute to check in with yourself. These 4 questions are based on the clinically validated PHQ-2 and GAD-2 screening tools used by mental health professionals worldwide.'}
                         </p>
                         <div className="assessment-meta">
-                            <span>⏱️ {lang === 'si' ? 'මිනිත්තු 1ක්' : '1 minute'}</span>
-                            <span>🔒 {lang === 'si' ? 'සම්පූර්ණයෙන්ම පෞද්ගලික' : 'Completely private'}</span>
-                            <span>📊 {lang === 'si' ? 'ඔබේ වාර්තාවට එකතු වේ' : 'Added to your wellness report'}</span>
+                            <span>{getEmoji('stopwatch')} {lang === 'si' ? 'මිනිත්තු 1ක්' : '1 minute'}</span>
+                            <span>{getEmoji('lock')} {lang === 'si' ? 'සම්පූර්ණයෙන්ම පෞද්ගලික' : 'Completely private'}</span>
+                            <span>{getEmoji('bar_chart')} {lang === 'si' ? 'ඔබේ වාර්තාවට එකතු වේ' : 'Added to your wellness report'}</span>
                         </div>
                         <button className="assessment-start-btn" onClick={() => setStep('questions')}>
                             {lang === 'si' ? 'ආරම්භ කරන්න' : 'Begin Check-In'}
@@ -162,8 +163,8 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                         {/* Section Label */}
                         <div className="assessment-section-label">
                             {currentQuestion < 2
-                                ? (lang === 'si' ? '📘 මනෝ අවපීඩන තිරගත කිරීම (PHQ-2)' : '📘 Depression Screening (PHQ-2)')
-                                : (lang === 'si' ? '📗 කනස්සල්ල තිරගත කිරීම (GAD-2)' : '📗 Anxiety Screening (GAD-2)')
+                                ? (lang === 'si' ? `${getEmoji('blue_book')} මනෝ අවපීඩන තිරගත කිරීම (PHQ-2)` : `${getEmoji('blue_book')} Depression Screening (PHQ-2)`)
+                                : (lang === 'si' ? `${getEmoji('green_book')} කනස්සල්ල තිරගත කිරීම (GAD-2)` : `${getEmoji('green_book')} Anxiety Screening (GAD-2)`)
                             }
                         </div>
 
@@ -228,7 +229,7 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                 {step === 'results' && results && (
                     <div className="assessment-results">
                         <div className="results-header">
-                            <span className="results-icon">✅</span>
+                            <span className="results-icon">{getEmoji('white_check_mark')}</span>
                             <h2>{lang === 'si' ? 'ඔබේ ප්‍රතිඵල' : 'Your Results'}</h2>
                         </div>
 
@@ -236,7 +237,7 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                             {/* PHQ-2 Result */}
                             <div className="result-card">
                                 <div className="result-card-header">
-                                    <span>📘 PHQ-2</span>
+                                    <span>{getEmoji('blue_book')} PHQ-2</span>
                                     <span className="result-card-label">
                                         {lang === 'si' ? 'මනෝ අවපීඩනය' : 'Depression'}
                                     </span>
@@ -267,7 +268,7 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                             {/* GAD-2 Result */}
                             <div className="result-card">
                                 <div className="result-card-header">
-                                    <span>📗 GAD-2</span>
+                                    <span>{getEmoji('green_book')} GAD-2</span>
                                     <span className="result-card-label">
                                         {lang === 'si' ? 'කනස්සල්ල' : 'Anxiety'}
                                     </span>
@@ -298,8 +299,8 @@ const SelfAssessmentModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
 
                         <p className="results-disclaimer">
                             {lang === 'si'
-                                ? '⚕️ මෙය සායනික රෝග විනිශ්චයක් නොවේ. ඔබ කනස්සල්ලට පත්ව සිටී නම්, කරුණාකර සුදුසුකම් ලත් උපදේශකයෙකු හමුවන්න.'
-                                : '⚕️ This is not a clinical diagnosis. If you are concerned, please speak with a qualified counselor. Your scores have been saved to your Wellness Report.'}
+                                ? `${getEmoji('medical_symbol')} මෙය සායනික රෝග විනිශ්චයක් නොවේ. ඔබ කනස්සල්ලට පත්ව සිටී නම්, කරුණාකර සුදුසුකම් ලත් උපදේශකයෙකු හමුවන්න.`
+                                : `${getEmoji('medical_symbol')} This is not a clinical diagnosis. If you are concerned, please speak with a qualified counselor. Your scores have been saved to your Wellness Report.`}
                         </p>
 
                         <button className="assessment-done-btn" onClick={handleClose}>

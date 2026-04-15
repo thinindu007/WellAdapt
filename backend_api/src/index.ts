@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Check DB Connection
 pool.connect()
-    .then(() => console.log("🐘 Connected to PostgreSQL"))
+    .then(() => console.log(" Connected to PostgreSQL"))
     .catch(err => console.error("Database connection error", err));
 
 // Routes
@@ -25,5 +25,5 @@ app.use('/api/auth', authRoutes);
 app.use('/api/study-plan', studyPlanRoutes);
 
 app.listen(PORT, () => {
-    console.log(`✅ WellAdapt Backend running on http://localhost:${PORT}`);
+    console.log(` WellAdapt Backend running on http://localhost:${PORT}`);
 });

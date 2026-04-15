@@ -8,6 +8,7 @@ import {
     BarChart, Bar
 } from 'recharts';
 import { translations } from '../utils/translations';
+import { getEmoji } from '../utils/emoji';
 import './MoodDashboard.css';
 
 // Emotion Color Map
@@ -36,13 +37,13 @@ const getEmotionColor = (emotion: string): string => {
 
 // Emotion Emoji Map
 const EMOTION_EMOJIS: Record<string, string> = {
-    'Joy': '😊', 'Happy': '😊', 'Happiness': '😊',
-    'Love': '💜', 'Surprise': '😲',
-    'Sadness': '😢', 'Sad': '😢',
-    'Anger': '😠', 'Angry': '😠',
-    'Fear': '😰', 'Stress': '😓',
-    'Anxiety': '😟', 'Disgust': '😣',
-    'Neutral': '😐', 'CRISIS': '🚨',
+    'Joy': getEmoji('blush'), 'Happy': getEmoji('blush'), 'Happiness': getEmoji('blush'),
+    'Love': getEmoji('purple_heart'), 'Surprise': getEmoji('astonished'),
+    'Sadness': getEmoji('cry'), 'Sad': getEmoji('cry'),
+    'Anger': getEmoji('angry'), 'Angry': getEmoji('angry'),
+    'Fear': getEmoji('cold_sweat'), 'Stress': getEmoji('sweat'),
+    'Anxiety': getEmoji('worried'), 'Disgust': getEmoji('persevere'),
+    'Neutral': getEmoji('neutral_face'), 'CRISIS': getEmoji('rotating_light'),
 };
 
 function MoodDashboard() {
@@ -186,7 +187,7 @@ function MoodDashboard() {
 
                 {!hasData ? (
                     <div className="dashboard-empty">
-                        <div className="empty-icon">💬</div>
+                        <div className="empty-icon">{getEmoji('speech_balloon')}</div>
                         <h3>{lang === 'si' ? 'තවම දත්ත නැත' : 'No Data Yet'}</h3>
                         <p>
                             {lang === 'si'
@@ -223,7 +224,7 @@ function MoodDashboard() {
 
                             <div className="summary-card dominant-mood-card">
                                 <span className="summary-icon">
-                                    {EMOTION_EMOJIS[summary?.topEmotion?.emotion] || '📊'}
+                                    {EMOTION_EMOJIS[summary?.topEmotion?.emotion] || getEmoji('bar_chart')}
                                 </span>
                                 <div className="summary-info">
                                     <span className="summary-value" style={{ color: getEmotionColor(summary?.topEmotion?.emotion) }}>

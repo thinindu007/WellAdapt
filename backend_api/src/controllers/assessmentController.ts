@@ -99,7 +99,6 @@ export const checkAssessmentDue = async (req: AuthRequest, res: Response) => {
 
         if (lastAssessment.rows.length === 0) {
             // check if they have at least 3 chat sessions first
-            // don't prompt brand new users
             const sessionCount = await query(
                 `SELECT COUNT(DISTINCT session_id)::int as count FROM chat_history WHERE user_id = $1`,
                 [userId]

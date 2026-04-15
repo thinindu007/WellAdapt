@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getEmoji } from '../utils/emoji';
 import './BreathingExercise.css';
 
 interface Props {
@@ -11,7 +12,7 @@ const BreathingSuggestionCard: React.FC<Props> = ({ lang }) => {
 
     return (
         <div className="breathing-suggestion-card" onClick={() => navigate('/breathing')}>
-            <span className="suggestion-icon">🧘</span>
+            <span className="suggestion-icon">{getEmoji('person_in_lotus_position')}</span>
             <div className="suggestion-text">
                 <span className="suggestion-title">
                     {lang === 'si'
