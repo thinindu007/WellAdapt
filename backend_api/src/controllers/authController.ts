@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import { query } from '../config/db';
 
 export const register = async (req: Request, res: Response) => {
-    // 1. Destructure the new preferredLanguage field
     const { email, password, preferredLanguage, religion } = req.body;
 
     try {
@@ -16,7 +15,7 @@ export const register = async (req: Request, res: Response) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // 2. Insert with language preference
+        //Insert with language preference
         const newUser = await query(
             'INSERT INTO users (email, password, preferred_language, religion) VALUES ($1, $2, $3, $4) RETURNING id, email, preferred_language, religion',
             [email, hashedPassword, preferredLanguage || 'en', religion || null]
@@ -41,7 +40,7 @@ export const login = async (req: Request, res: Response) => {
 
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
 
-        // 3. Return the language so the Frontend knows which UI to show
+        //Return the language to the Frontend for which UI to show
         res.json({
             token,
             user: {

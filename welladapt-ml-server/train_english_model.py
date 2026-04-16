@@ -37,7 +37,7 @@ def clean_text(text):
     text = str(text).lower()
     text = re.sub(r'http\S+|www\S+|https\S+', '', text)
     text = re.sub(r'\@\w+|\#', '', text)
-    # Normalize contractions BEFORE stripping apostrophes
+    # Normalize contractions before stripping apostrophes
     contractions = {
         "don't": "dont", "can't": "cant", "won't": "wont",
         "wasn't": "wasnt", "haven't": "havent", "isn't": "isnt",

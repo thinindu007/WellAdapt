@@ -16,7 +16,7 @@ export const handleChat = async (req: AuthRequest, res: Response) => {
     }
 
     try {
-        // 1. Fetch user's preferred language from the Database
+        //Fetch user's preferred language from the Database
         const userResult = await query('SELECT preferred_language, religion FROM users WHERE id = $1', [userId]);
         userLang = userResult.rows[0]?.preferred_language || 'en';
         const userReligion = userResult.rows[0]?.religion || 'buddhist';
@@ -73,7 +73,7 @@ Task:
             botResponse = ollamaResponse.data.response;
         }
 
-        // 2. Save the interaction to chat_history
+        //Save the interaction to chat_history
         await query(
             'INSERT INTO chat_history (user_id, user_message, bot_response, emotion, session_id) VALUES ($1, $2, $3, $4, $5)',
             [userId, text, botResponse, detectedEmotion, sessionId]
@@ -158,7 +158,7 @@ RULES:
             }
         }
 
-        // 3. Return response to Frontend
+        // Return response to Frontend
         const suggestBreathing = ['Stress', 'Anxiety', 'Fear', 'Depression'].includes(detectedEmotion);
 
         return res.status(200).json({

@@ -56,7 +56,7 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
     const userId = req.userId;
 
     try {
-        // 1. Fetch Chat Data for the last 30 days
+        //Fetch Chat Data for the last 30 days
         const chatData = await query(
             `SELECT user_message, bot_response, emotion, timestamp 
              FROM chat_history 
@@ -71,14 +71,14 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
             });
         }
 
-        // 2. Data Aggregation
+        // Data Aggregation
         const moodStats: Record<string, number> = {};
         chatData.rows.forEach((row: any) => {
             const emotion = row.emotion || 'Unknown';
             moodStats[emotion] = (moodStats[emotion] || 0) + 1;
         });
 
-        // 3. AI Trigger Analysis
+        // AI Trigger Analysis
         const stressInputs = chatData.rows
             .filter((row: any) => row.emotion === 'Stress' || row.emotion === 'Anxiety')
             .map((row: any) => row.user_message)
@@ -101,7 +101,7 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
             }
         }
 
-        // 4. Initialize PDF Generation
+        // Initialize PDF Generation
         const doc = new PDFDocument({ margin: 50, size: 'A4' });
         const filename = `WellAdapt_Report_${userId}_${Date.now()}.pdf`;
 
@@ -119,7 +119,7 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
         doc.text(`Generated on: ${new Date().toLocaleDateString()}`, { align: 'center' });
         doc.moveDown(2);
 
-        // Section 1: Emotional Overview
+        //  Emotional Overview
         doc.fillColor('#0369a1').fontSize(14).text('1. Emotional Distribution', { underline: true });
         doc.moveDown();
         doc.fillColor('#334155').fontSize(11);
@@ -131,13 +131,13 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
         });
         doc.moveDown(2);
 
-        // Section 2: Stress Trigger Analysis
+        // Stress Trigger Analysis
         doc.fillColor('#0369a1').fontSize(14).text('2. AI-Identified Stress Triggers', { underline: true });
         doc.moveDown();
         renderMarkdownToPDF(doc, aiAnalysisResponse, '#334155');
         doc.moveDown(2);
 
-        // Section 3: Counseling Bridge
+        // Counseling Bridge
         doc.fillColor('#0369a1').fontSize(14).text('3. Recent Situational Wellness Advice', { underline: true });
         doc.moveDown();
 
@@ -158,7 +158,7 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
             doc.fillColor('#64748b').fontSize(11).text("No distress-related advice required in the recent period.");
         }
 
-        // Section 4: PHQ-2/GAD-2 Clinical Screening History
+        // PHQ-2/GAD-2 Clinical Screening History
         doc.moveDown(2);
         doc.fillColor('#0369a1').fontSize(14).text('4. Standardized Self-Assessment Screening (PHQ-2 / GAD-2)', { underline: true });
         doc.moveDown();
@@ -195,7 +195,7 @@ export const generateWellnessReport = async (req: AuthRequest, res: Response) =>
             doc.fillColor('#64748b').fontSize(10).text('Self-assessment data unavailable.');
         }
 
-        // Section 5: Emergency Contacts
+        // Emergency Contacts
         doc.moveDown();
         doc.fillColor('#ef4444').fontSize(12).font('Helvetica-Bold').text('5.Emergency Support Resources (Sri Lanka)');
         doc.font('Helvetica');
