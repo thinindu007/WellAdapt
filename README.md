@@ -16,7 +16,7 @@ The project is built as a modular microservices-based ecosystem:
 3.  **Cross-Platform NLP:** Combines traditional Deep Learning (CNN-LSTM) with LLMs to provide a balance of accuracy and empathy.
 
 ## 🛠️ Quick Start
-1.  **Clone the Repo:** `git clone https://github.com/your-username/WellAdapt.git`
+1.  **Clone the Repo:** `git clone https://github.com/thinindu007/WellAdapt.git`
 2.  **ML Server:** Navigate to `/welladapt-ml-server`, install `requirements.txt`, and run `uvicorn main:app`.
 3.  **Backend:** Navigate to `/welladapt-backend`, run `npm install`, and start with `npm run dev`.
 4.  **Frontend:** Navigate to `/welladapt-frontend`, run `npm install`, and start with `npm run dev`.
